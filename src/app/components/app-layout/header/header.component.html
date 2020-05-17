@@ -1,0 +1,29 @@
+<mat-toolbar class="mat-elevation-z6">
+  <div class="logo-container">
+    <img class="logo" src="assets/imgs/logo-app.png">
+  </div>
+  <div class="spacer"></div>
+  <div class="user-info-container">
+    <div class="user-image-container">
+      <img class="avatar" src="assets/imgs/users.png">
+    </div>
+    <div class="user-details-container" [matMenuTriggerFor]="menu">
+      <span class="user-name">{{ user.lastName + " "+ user.firstName }}</span>
+      <span class="user-role"> {{ user.role }} </span>
+    </div>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        <span>Voir profil</span>
+      </button>
+      <!-- <button mat-menu-item>
+        <mat-icon>voicemail</mat-icon>
+        <span>Check voice mail</span>
+      </button> -->
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Se déconnecter</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>
