@@ -14,6 +14,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthorizationGuard } from './guards/authorization.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -29,6 +30,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularMaterialModule,
+    ReactiveFormsModule,
     HttpClientModule
 
   ],

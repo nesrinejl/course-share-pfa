@@ -10,7 +10,8 @@
     </button>
   </div>
   <mat-menu #course="matMenu">
-    <button mat-menu-item [routerLink]="['/teacher/courses']" routerLinkActive="mat-primary">
+  <button mat-menu-item (click)="openNewCourseDialog()" routerLinkActive="mat-primary">
+    <!-- <button mat-menu-item [routerLink]="['/teacher/courses/new-course']" routerLinkActive="mat-primary"> -->
         <mat-icon>library_books</mat-icon>
         <span>Créer un cours</span>
     </button>

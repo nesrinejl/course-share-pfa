@@ -1,1 +1,26 @@
-<p>new course componnent</p>
+<div class="dialog-header-container">
+
+  <h2 class="dialog-title">Créer un cours</h2>
+
+</div>
+
+<div class="dialog-content-container">
+  <form [formGroup]="newCourseForm">
+    <mat-form-field>
+
+        <input matInput type="text" id="courseName"  placeholder="Nom du cours" formControlName="courseName" required>
+        <mat-error *ngIf="newCourseForm.get('courseName').hasError('required')">Ce champ est obligatoire.</mat-error>
+
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" id="courseDescription"  placeholder="Description du cours" formControlName="courseDescription">
+    </mat-form-field>
+  </form>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onSubmit()">Créer</button>
+    <!-- <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button> -->
+  </div>
+</div>
+
+
+

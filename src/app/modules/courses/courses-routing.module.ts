@@ -10,10 +10,10 @@ const COURSES_ROUTES: Routes = [
     path: '',
     component: CoursesComponent,
     children: [
-      {
-        path: 'new-course',
-        component: NewCourseComponent
-      }
+      // {
+      //   path: 'new-course',
+      //   component: NewCourseComponent
+      // }
     ]
   }
 ];
