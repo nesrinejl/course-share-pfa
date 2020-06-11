@@ -11,11 +11,14 @@ import { UserData } from '../../../models/user.model';
 export class HeaderComponent implements OnInit {
 
   user: UserData;
+  userRole: string;
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.user = this.authService.getUser()
+    this.user = this.authService.getUser();
     console.log(this.user);
+    this.userRole = this.authService.getUserRole();
+    console.log(this.userRole);
   }
   onLogout(){
     this.authService.logout();

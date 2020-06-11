@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 
-const userRoutes = require('./routes/user.routes')
+const userRoutes = require('./routes/user.routes');
+const courseRoutes = require('./routes/course.routes');
+
 const app = express();
 
 
@@ -42,8 +44,13 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-/**user routes */
+/**
+ * user routes
+ */
 app.use('/api/v1/user', userRoutes);
-
+/**
+ * course routes
+ */
+app.use('/api/v1/courses', courseRoutes);
 
 module.exports = app;

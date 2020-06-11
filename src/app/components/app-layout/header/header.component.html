@@ -2,15 +2,29 @@
   <div class="logo-container">
     <img class="logo" src="assets/imgs/logo-app.png">
   </div>
+
   <div class="spacer"></div>
+  <div  *ngIf="userRole == 'Teacher'" [matMenuTriggerFor]="course">
+    <button mat-button>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <mat-menu #course="matMenu">
+    <button mat-menu-item [routerLink]="['/teacher/courses']" routerLinkActive="mat-primary">
+        <mat-icon>library_books</mat-icon>
+        <span>Créer un cours</span>
+    </button>
+  </mat-menu>
   <div class="user-info-container">
     <div class="user-image-container">
       <img class="avatar" src="assets/imgs/users.png">
     </div>
+
     <div class="user-details-container" [matMenuTriggerFor]="menu">
       <span class="user-name">{{ user.lastName + " "+ user.firstName }}</span>
       <span class="user-role"> {{ user.role }} </span>
     </div>
+
     <mat-menu #menu="matMenu">
       <button mat-menu-item>
         <mat-icon>person</mat-icon>

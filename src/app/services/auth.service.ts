@@ -41,7 +41,9 @@ export class AuthService{
   getUser(){
     return this.user;
   }
-
+  getUserRole(){
+    return this.user.role;
+  }
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }

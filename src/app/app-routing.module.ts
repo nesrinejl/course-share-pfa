@@ -9,6 +9,7 @@ import { AuthorizationGuard } from './guards/authorization.guard';
 const routes: Routes = [
   // { path: '', component: AppLayoutComponent, canActivate: [AuthGuard] },
   { path: 'auth', loadChildren: () => import('./components/auth/auth.module').then(mod => mod.AuthModule),  },
+  
   {
     path: '',
     component: AppLayoutComponent,
