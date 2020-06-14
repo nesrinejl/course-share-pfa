@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
  * document Schema
  **/
 const documentSchema = mongoose.Schema({
-  type: {
+  documentType: {
     type: String,
     enum: ["FILE", "VIDEO", "URL", "IMAGE", "SOUND"],
     required: true
@@ -36,7 +36,7 @@ const contentSchema = mongoose.Schema({
  * chapter Schema
  **/
 const chapterSchema = mongoose.Schema({
-  name: {
+  chapterName: {
       type: String,
       required: true
   },
@@ -52,7 +52,7 @@ const courseSchema = mongoose.Schema({
       type:String,
       required: true
     },
-    description: {
+    courseDescription: {
       type: String,
     },
     chapters: [chapterSchema],

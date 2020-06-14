@@ -10,11 +10,13 @@ import { HeaderComponent } from './components/app-layout/header/header.component
 import { AngularMaterialModule } from './angular-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 import { AuthGuard } from './guards/auth.guard';
 import { AuthorizationGuard } from './guards/authorization.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { ReactiveFormsModule } from '@angular/forms';
+import { CourseService } from './services/course.service'
 
 
 
@@ -35,6 +37,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
   ],
   providers: [
+    CourseService,
     AuthGuard,
     AuthorizationGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
