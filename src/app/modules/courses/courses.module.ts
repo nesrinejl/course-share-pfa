@@ -7,6 +7,9 @@ import { NewCourseComponent } from './new-course/new-course.component';
 
 import { AngularMaterialModule } from 'src/app/angular-material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CourseComponent } from './course/course.component';
+import { CoursesListComponent } from './courses-list/courses-list.component';
+import { NewChapterComponent } from './new-chapter/new-chapter.component';
 
 @NgModule({
   imports: [
@@ -20,11 +23,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
   declarations: [
 
     CoursesComponent,
-    NewCourseComponent
+    NewCourseComponent,
+    CourseComponent,
+    CoursesListComponent,
+    NewChapterComponent
 
   ],
   entryComponents: [
-    NewCourseComponent
+    NewCourseComponent,
+    NewChapterComponent
   ]
 })
 export class CoursesModule { }

@@ -1,0 +1,21 @@
+<div class="dialog-header-container">
+
+    <h2 class="dialog-title">Ajouter un Chapitre</h2>
+
+</div>
+
+<div class="dialog-content-container">
+    <form [formGroup]="newChapterForm">
+        <mat-form-field>
+
+            <input matInput type="text" id="courseName" placeholder="Nom du chapitre" formControlName="chapterName" required>
+            <mat-error *ngIf="newChapterForm.get('chapterName').hasError('required')">Ce champ est obligatoire.</mat-error>
+
+        </mat-form-field>
+
+    </form>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onCreateChapter()">Créer</button>
+        <!-- <button mat-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button> -->
+    </div>
+</div>

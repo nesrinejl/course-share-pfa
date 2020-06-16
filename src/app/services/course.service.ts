@@ -10,6 +10,7 @@ import { Course } from '../models/course.model';
 
 import { HeaderComponent } from '.././components/app-layout/header/header.component'
 import { FETCHING_JSON_REQUESTS_HTTP_OPTIONS } from '../constants/http-options.constants';
+import { Chapter } from '../models/chapter.model';
 
 
 const backendUrl  = environment.apiUrl + '/courses';
@@ -17,25 +18,18 @@ const backendUrl  = environment.apiUrl + '/courses';
 @Injectable()
 export class CourseService {
 
+  private course: Course;
   constructor(
     private http: HttpClient,
     private router: Router
   ) {}
 
   createCourse(course: Course): Observable<any>{
-    //const courseData = new FormData();
+
     return this.http.post<any>(backendUrl + '/new-course', course);
 
-    // this.http
-    //   .post(BACKEND_URL + '/courses/', course)
-    //   .subscribe(() => {
-    //     this.router.navigate(["/"]);
-    //     }, error => {
-    //       //this.authStatusListener.next(false);
-    //     }
-    //   );
   }
-
+// get course by userId (creator)
   getCoursesByUserId(userId: string): Observable<Course[]>{
 
     const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
@@ -43,9 +37,22 @@ export class CourseService {
     options.params = new HttpParams();
     options.params = options.params.set('userId', userId);
 
-    console.log(this.http.get<Course[]>(backendUrl, options));
     return this.http.get<Course[]>(backendUrl, options);
 
   }
 
+  //get course by Id
+  getCourseById(courseId: string) : Observable<Course>{
+
+    const url = backendUrl + '/' + courseId;
+
+    return this.http.get<Course>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
+
+  }
+  getCourseId(){
+    return this.course;
+  }
+  addChapter(chapter: Chapter, courseId: string): Observable<any>{
+    return this.http.post<any>(backendUrl + '/' + courseId +'chapters', chapter);
+  }
 }

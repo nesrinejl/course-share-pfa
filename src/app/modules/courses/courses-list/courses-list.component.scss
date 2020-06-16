@@ -1,0 +1,74 @@
+.placeholder {
+    padding: 48px 0px;
+    text-align: center;
+}
+
+.cards-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    .card-container {
+        min-width: 260px;
+        min-height: 180px;
+        padding: 12px;
+        box-sizing: border-box;
+        display: flex;
+        .create-new-course-button-card,
+        .displayed-course-card {
+            flex: 1;
+            position: relative;
+            border-top-left-radius: 4px !important;
+            border-top-right-radius: 4px !important;
+            border-bottom-left-radius: 4px !important;
+            border-bottom-right-radius: 4px !important;
+            .course-description {
+                font-size: small;
+                text-overflow: ellipsis;
+                width: 200px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                resize: horizontal;
+            }
+            .student-number {
+                font-size: smaller;
+                text-overflow: ellipsis;
+            }
+        }
+        .create-new-course-button-card {
+            .button-card-content {
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                border-top-left-radius: 0px !important;
+                border-top-right-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                border-bottom-right-radius: 0px !important;
+                p {
+                    margin-bottom: 0px;
+                }
+            }
+        }
+        .displayed-course-card {
+            .course-menu-button-container {
+                pointer-events: visible;
+                position: absolute;
+                bottom: 8px;
+                right: 8px;
+            }
+        }
+    }
+}
+
+.course-name {
+    color: #564D4D;
+    font-size: 1.25rem !important;
+    //font-weight: bold;
+    line-height: 2rem !important;
+    margin-bottom: 0px !important;
+}

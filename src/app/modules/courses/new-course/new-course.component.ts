@@ -1,6 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, Validators, FormGroup  } from '@angular/forms';
+
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -22,7 +24,9 @@ export class NewCourseComponent {
     public authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router,
-    public dialogRef: MatDialogRef<NewCourseComponent>
+    public dialogRef: MatDialogRef<NewCourseComponent>,
+    private snackBar: MatSnackBar,
+
   ) {}
 
 
@@ -35,22 +39,24 @@ export class NewCourseComponent {
 
   onCreateCourse(){
     const currentUser: UserData = this.authService.getUser();
-    const form: Course = { ...this.newCourseForm.value };
+    const course: Course = { ...this.newCourseForm.value };
 
     if (this.newCourseForm.invalid){
       return;
     }
     if (currentUser) {
-      form.creator = currentUser._id;
+      course.creator = currentUser._id;
 
     }
-    this.courseService.createCourse(form).subscribe(
+    this.courseService.createCourse(course).subscribe(
       (response: any) => {
-          console.log('form created successfully!');
+          this.snackBar.open('Le cours a été crée avec succès!');
+
           this.router.navigate([ '/' ]);
           this.dialogRef.close(true);
       },
       (error: any) => {
+          this.snackBar.open('Oups! Something went wrong, please verify your input and try again later.');
           console.log(error);
       }
 

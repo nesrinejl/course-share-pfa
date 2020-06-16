@@ -1,0 +1,129 @@
+mat-card {
+    box-sizing: border-box !important;
+    border-bottom-left-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+}
+
+.flux-card {
+    width: 100% !important;
+    padding: 0 !important;
+    background-color: #0011FF;
+}
+
+.flux-card>mat-card-header {
+    padding: 10px !important;
+    margin: 0px !important;
+    //background-color: #f83e8c;
+    padding-top: 30px !important;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    border-top-left-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+}
+
+mat-card-title {
+    font-size: 1.75rem !important;
+    color: white;
+}
+
+.add-chapter,
+.chapters-card,
+.flux-posts-card {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+.chapters-card {
+    .course-menu-button-container {
+        pointer-events: visible;
+        position: relative;
+        bottom: 8px;
+        right: 8px;
+    }
+}
+
+.add-chapter {
+    margin-bottom: 0px;
+}
+
+.add-chapter-btn {
+    background-color: #1DC4E9;
+    // background-image: linear-gradient(90deg, #1DE9B6, #1DC4E9);
+    color: white;
+}
+
+.create-chapters-card,
+.chapter-name,
+.person-card-title {
+    color: #615F5F;
+}
+
+.chapter-name {
+    margin-top: 15px;
+}
+
+.sad-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 4px;
+    vertical-align: middle
+}
+
+.user-info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sad-image-container {
+    height: 50px;
+    width: 50px;
+    vertical-align: middle
+}
+
+.user-image-container {
+    height: 36px;
+    width: 36px;
+}
+
+.avatar {
+    height: 100%;
+    border-radius: 50%;
+}
+
+.sad-emoji {
+    height: 100%;
+}
+
+.sad-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: stretch;
+    margin-left: 24px;
+}
+
+.user-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: stretch;
+    margin-left: 12px;
+}
+
+.user-name {
+    font-size: 15px;
+    line-height: 14px;
+    font-weight: 400;
+}

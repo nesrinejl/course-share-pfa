@@ -2,24 +2,30 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CoursesComponent } from './courses.component';
-import { NewCourseComponent } from './new-course/new-course.component';
+
+import { CourseComponent } from './course/course.component';
+import { CoursesListComponent } from './courses-list/courses-list.component';
 
 
-const COURSES_ROUTES: Routes = [
+const coursesRoutes: Routes = [
   {
     path: '',
     component: CoursesComponent,
     children: [
-      // {
-      //   path: 'new-course',
-      //   component: NewCourseComponent
-      // }
+      {
+        path: '',
+        component: CoursesListComponent
+      },
+      {
+        path: 'course/:courseId',
+        component: CourseComponent
+      }
     ]
   }
 ];
 
 @NgModule({
-  imports: [ RouterModule.forChild(COURSES_ROUTES) ],
+  imports: [ RouterModule.forChild(coursesRoutes) ],
   exports: [ RouterModule ]
 })
 export class CoursesRoutingModule {
