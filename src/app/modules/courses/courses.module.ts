@@ -10,6 +10,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CourseComponent } from './course/course.component';
 import { CoursesListComponent } from './courses-list/courses-list.component';
 import { NewChapterComponent } from './new-chapter/new-chapter.component';
+import { NewContentComponent } from './new-content/new-content.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { NewChapterComponent } from './new-chapter/new-chapter.component';
     NewCourseComponent,
     CourseComponent,
     CoursesListComponent,
-    NewChapterComponent
+    NewChapterComponent,
+    NewContentComponent
 
   ],
   entryComponents: [

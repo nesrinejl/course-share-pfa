@@ -46,11 +46,10 @@ export class NewCourseComponent {
     }
     if (currentUser) {
       course.creator = currentUser._id;
-
     }
     this.courseService.createCourse(course).subscribe(
       (response: any) => {
-          this.snackBar.open('Le cours a été crée avec succès!');
+          this.snackBar.open('Le cours a été créé avec succès!');
 
           this.router.navigate([ '/' ]);
           this.dialogRef.close(true);

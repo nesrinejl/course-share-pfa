@@ -52,7 +52,8 @@ export class CourseService {
   getCourseId(){
     return this.course;
   }
-  addChapter(chapter: Chapter, courseId: string): Observable<any>{
-    return this.http.post<any>(backendUrl + '/' + courseId +'chapters', chapter);
+
+  addChapter(chapter: any, courseId: string): Observable<any>{
+    return this.http.post<any>(backendUrl + '/' + courseId +'/chapters', chapter);
   }
 }

@@ -76,6 +76,7 @@ exports.getCourseById = (req, res, next) => {
                 })
             }
             res.status(200).json(
+
                 course,
             );
         })
@@ -97,16 +98,17 @@ exports.addChapter = (req, res, next) => {
 
     Course.update({ _id: courseId }, { $addToSet: { chapters: req.body.chapters } })
         .exec()
-        .then(course => {
-            if (!course) {
+        .then(result => {
+            console.log(result);
+            if (!result) {
                 return res.status(404).json({
                     message: "Course not found !",
                 })
             }
-            res.status(200).json(
-
-                course,
-            );
+            res.status(200).json({
+                message: "Chapter created successfully!",
+                result
+            });
         })
         .catch(
             err => {

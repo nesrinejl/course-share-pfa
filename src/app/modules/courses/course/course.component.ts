@@ -23,10 +23,9 @@ export class CourseComponent implements OnInit {
 
   currentUser: UserData;
   course: Course = new Course();
-  courseId: string;
 
   userName: string;
-  typesOfShoes: string[] = ['Sirine Mabrouk', 'Sirine Mabrouk', 'Sirine Mabrouk', 'Sirine Mabrouk', 'Sirine Mabrouk'];
+  typesOfShoes: string[] = ['Sirine Mabrouk', 'Sirine Mabrouk', 'Sirine Mabrouk'];
 
   constructor(
     private router: Router,
@@ -41,22 +40,20 @@ export class CourseComponent implements OnInit {
 
     this.activatedRoute.paramMap.subscribe(
       (paramMap: ParamMap) => {
-          this.courseId = paramMap.get('courseId');
-          this.loadCourse();
+          this.loadCourse(paramMap.get('courseId'));
       }
   );
 
   }
 
-  loadCourse() {
+  loadCourse(courseId: string) {
     this.isLoading = true;
     const currentUser : UserData = this.authService.getUser();
 
-    this.courseService.getCourseById(this.courseId).subscribe(
+    this.courseService.getCourseById(courseId).subscribe(
 
       (course: Course) => {
         this.course = course;
-       // console.log(course.chapters[1].chapterName);
         if (currentUser) {
           this.isCreator = currentUser._id === this.course.creator;
 
@@ -77,12 +74,26 @@ export class CourseComponent implements OnInit {
       }
     );
   }
+
   openNewChapterDialog(){
     this.dialog.open(
       NewChapterComponent,
-        {
-          width: '500px'
-        }
+      {
+        data: {
+          courseId : this.course._id,
+        },
+        width: '500px'
+      }
+
+    )
+    .afterClosed()
+    .subscribe(
+      result =>{
+        console.log(result);
+        this.loadCourse(this.course._id);
+      }
     );
   }
+
 }
+

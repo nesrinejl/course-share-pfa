@@ -9,8 +9,20 @@
                     <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
                 </div>
                 <div *ngIf="!isLoading">
-                    <div class="placeholder" *ngIf="!courses || courses.length <= 0">
-                        <p>Vous n'avez aucun cours! <a (click)="onCreateNewCourse()">Cliquez ici pour créer votre premier cours</a></p>
+                    <div class="tab-content-container" *ngIf="!courses || courses.length <= 0">
+                        <mat-card class="create-chapters-card">
+                            <mat-card-content>
+                                <div class="sad-container">
+                                    <div class="sad-image-container">
+                                        <img class="sad-emoji" src="assets/imgs/sad.png">
+                                    </div>
+                                    <div class="sad-details-container">
+                                        <p>Vous n'avez aucun cours </p>
+                                        <h3>Attribuez des chapitres à votre classe ici</h3>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
                     </div>
                 </div>
                 <div class="cards-container" *ngIf="courses && courses.length > 0">
