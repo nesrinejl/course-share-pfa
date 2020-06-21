@@ -8,6 +8,7 @@ import { CourseService } from '../../../services/course.service';
 import { Course } from '../../../models/course.model';
 import { UserData } from '../../../models/user.model';
 import { NewChapterComponent } from '../new-chapter/new-chapter.component';
+import { Chapter } from 'src/app/models/chapter.model';
 
 @Component({
   selector: 'app-course',
@@ -93,6 +94,10 @@ export class CourseComponent implements OnInit {
         this.loadCourse(this.course._id);
       }
     );
+  }
+
+  navigateToChapterDetails(courseId: string, chapterId: string) {
+    this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId);
   }
 
 }

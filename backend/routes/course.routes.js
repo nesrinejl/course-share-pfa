@@ -1,8 +1,12 @@
 const express = require('express');
 
 const CourseController = require('../controllers/course.controller');
-const checkAuth = require('../middleware/checkAuth');
 
+const checkAuth = require('../middleware/checkAuth');
+const extractFile = require('../middleware/file.middleware');
+const multer = require('multer');
+
+var upload = multer({ dest: 'uploads/' })
 const router = express.Router();
 
 /**
@@ -25,4 +29,17 @@ router.get('/:courseId', checkAuth, CourseController.getCourseById);
  */
 router.post('/:courseId/chapters', checkAuth, CourseController.addChapter);
 
+/**
+ * add content to chapter route
+ */
+router.post('/:courseId/chapters/:chapterId/add-content', checkAuth, upload.single('file'), CourseController.addContent);
+/**
+ * get chapter by Id route
+ */
+router.get('/:courseId/chapters/:chapterId', checkAuth, CourseController.getChapterById);
+/**
+ * get chapters by courseId route
+ */
+
+router.get('/:courseId/chapters', checkAuth, CourseController.getChaptersByCourseId);
 module.exports = router;

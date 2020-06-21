@@ -5,30 +5,30 @@ const mongoose = require('mongoose');
  * document Schema
  **/
 const documentSchema = mongoose.Schema({
-  documentType: {
-    type: String,
-    enum: ["FILE", "VIDEO", "URL", "IMAGE", "SOUND"],
-    required: true
-  },
-  documentPath: {
-    type: String,
-    required: true
-  }
+    documentType: {
+        type: String,
+        enum: ["FILE", "VIDEO", "URL", "IMAGE", "SOUND"],
+        required: true
+    },
+    file: {
+        type: String,
+        //required: true
+    }
 });
 
 /**
  * Content Schema
  **/
 const contentSchema = mongoose.Schema({
-  contentType: {
-      type: String,
-      enum: ["DOCUMENTATION", "TASK", "QUESTIONNAIRE"],
-      required: true
-  },
-  content: {
-    type: String
-  },
-  documents: [documentSchema],
+    contentType: {
+        type: String,
+        enum: ["DOCUMENTATION", "TASK", "QUESTIONNAIRE"],
+        required: true
+    },
+    content: {
+        type: String
+    },
+    documents: [documentSchema],
 
 });
 
@@ -36,11 +36,11 @@ const contentSchema = mongoose.Schema({
  * chapter Schema
  **/
 const chapterSchema = mongoose.Schema({
-  chapterName: {
-      type: String,
-      required: true
-  },
-  content: [contentSchema]
+    chapterName: {
+        type: String,
+        required: true
+    },
+    content: [contentSchema]
 
 });
 
@@ -49,16 +49,16 @@ const chapterSchema = mongoose.Schema({
  **/
 const courseSchema = mongoose.Schema({
     courseName: {
-      type:String,
-      required: true
+        type: String,
+        required: true
     },
     courseDescription: {
-      type: String,
+        type: String,
     },
     chapters: [chapterSchema],
     creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     }
 });
 

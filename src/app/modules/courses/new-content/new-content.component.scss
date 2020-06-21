@@ -1,0 +1,53 @@
+.document-container {
+    margin-top: 15px;
+}
+
+mat-card+mat-card {
+    margin-top: 24px;
+}
+
+.document-container {
+    margin: 24px 0px;
+}
+
+.remove-document-container {
+    width: 100%;
+    height: 24px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    img {
+        width: 20px;
+        height: 20px;
+        display: block;
+        cursor: pointer;
+    }
+}
+
+.add-doc-img {
+    width: 20px;
+    height: 20px;
+}
+
+.add-document-clickable-card {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    span {
+        margin-left: 24px;
+    }
+    &>* {
+        display: block;
+    }
+}
+
+.image-preview {
+    height: 5rem;
+    margin: 1rem 0;
+}
+
+.image-preview img {
+    height: 100%;
+}

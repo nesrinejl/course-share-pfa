@@ -1,1 +1,55 @@
-<p>new-content works!</p>
+<div class="app-layout-header">
+    <div class="app-layout-wrapper">
+        <h1>{{ course.courseName }}</h1>
+        <p>{{ chapter.chapterName }}</p>
+    </div>
+</div>
+<div class="app-layout-wrapper">
+    <form [formGroup]="addContentForm">
+        <mat-card class="content-form-card">
+            <mat-card-content>
+                <mat-form-field>
+                    <mat-label>Contenu</mat-label>
+                    <textarea matInput id="content" formControlName="content" rows="5" required></textarea>
+                    <mat-error *ngIf="addContentForm.get('content').hasError('required')">This field is required</mat-error>
+                    <mat-error *ngIf="addContentForm.get('content').hasError('blank')">Form description must have at least one none whitespace character</mat-error>
+                    <mat-error *ngIf="addContentForm.get('content').hasError('maxlength')">Please do not exceed 500 characters</mat-error>
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="document-container" formArrayName="documents" *ngIf="showDocumentCard">
+            <mat-card class="content-form-card" *ngFor="let document of documents.controls; let i = index;" [formGroupName]="i">
+                <mat-card-content>
+                    <div class="remove-document-container">
+                        <img src="assets/imgs/close.png" (click)="onRemoveDocument(i)">
+                        <!-- <mat-icon (click)="onRemoveDocument(i)">clear</mat-icon> -->
+                    </div>
+                    <mat-form-field>
+                        <mat-label>Document </mat-label>
+                        <mat-select id="document" formControlName="documentType" required>
+                            <mat-option value="FILE">Fichier</mat-option>
+                            <mat-option value="IMAGE">Image</mat-option>
+                            <mat-option value="SOUND">Son</mat-option>
+                            <mat-option value="VIDEO">Vidéo</mat-option>
+                            <mat-option value="URL">Lien</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button mat-stroked-button type="button" (click)="filePicker.click()">Pick Image</button>
+                    <input type="file" #filePicker formControlName='file'>
+                    <!--adding image preview -->
+                    <!-- <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && addContentForm.get('documentPath').valid">
+                        <img [src]="imagePreview" [alt]="addContentForm.value.title">
+                    </div> -->
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <mat-card matRipple class="clickable-card add-document-clickable-card" (click)="onAddDocument()">
+            <img class="add-doc-img" src="assets/imgs/plus.png">
+            <span>Ajouter un document</span>
+        </mat-card>
+        <div class="form-actions-container">
+            <button mat-raised-button color="primary" (click)="onCreateContent()">Ajouter</button>
+        </div>
+    </form>
+</div>

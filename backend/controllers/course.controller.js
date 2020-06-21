@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
 const Course = require('../models/course.model');
+const Chapter = require('../models/course.model');
+
 
 /**
  * create course
@@ -93,28 +95,144 @@ exports.getCourseById = (req, res, next) => {
  */
 
 exports.addChapter = (req, res, next) => {
-    const courseId = req.params.courseId;
-    console.log(req.body.chapters)
+        const courseId = req.params.courseId;
 
-    Course.update({ _id: courseId }, { $addToSet: { chapters: req.body.chapters } })
-        .exec()
-        .then(result => {
-            console.log(result);
-            if (!result) {
-                return res.status(404).json({
-                    message: "Course not found !",
-                })
-            }
-            res.status(200).json({
-                message: "Chapter created successfully!",
-                result
+        Course.findByIdAndUpdate({ _id: courseId }, { $addToSet: { chapters: req.body.chapters } })
+            .exec()
+            .then(
+                result => {
+                    console.log(result);
+                    if (!result) {
+                        return res.status(404).json({
+                            message: "Course not found !",
+                        })
+                    }
+                    res.status(200).json({
+                        message: "Chapter created successfully!",
+                        result
+                    });
+                }
+            )
+            .catch(
+                err => {
+                    console.log(err);
+                    res.status(500).json({ error: err });
+                }
+            );
+    }
+    /**
+     * add content to chapter
+     */
+
+exports.addContent = async(req, res, next) => {
+        const url = req.protocol + '://' + req.get('host');
+
+        const chapterId = req.params.chapterId;
+        const courseId = req.params.courseId;
+        try {
+            const course = await Course.findOne({
+                _id: courseId
             });
-        })
+
+            for (let i = 0; i < course.chapters.length; i++) {
+                if (course.chapters[i]._id == chapterId) {
+                    // for (let j = 0; j < course.chapters[i].content.documents.length; j++) {
+
+                    //     course.chapters[i].content.documents[j].file = url + '/images/' + req.file.filename;
+
+                    // }
+                    var Array = req.body.documents;
+                    console.log(req.body);
+
+                    console.log(Array);
+                    // console.log(Array[0]["documentType"]);
+                    // console.log(Array[0]["file"]);
+
+                    course.chapters[i].content.push({
+                        contentType: req.body.contentType,
+                        content: req.body.content,
+                        documents: req.body.documents,
+                    });
+                    console.log(req.file);
+                }
+            }
+            course.save().then(
+                data => {
+                    return res.status(200).json({
+                        message: 'ok',
+                        data: data
+                    });
+                }
+            ).catch(
+                err => {
+                    res.status(500).json({ error: err });
+                });
+        } catch (err) {
+            next(err);
+        }
+
+    }
+    /**
+     * get chapter by Id
+     */
+exports.getChapterById = (req, res, next) => {
+        const chapterId = req.params.chapterId;
+        const courseId = req.params.courseId;
+
+        Course.findById(courseId)
+            .select("chapters")
+            .exec()
+            .then(course => {
+
+                if (!course) {
+                    return res.status(404).json({
+                        message: "Course not found !",
+                    })
+                }
+                for (let i = 0; i < course.chapters.length; i++) {
+                    if (course.chapters[i]._id == chapterId) {
+                        chapter = course.chapters[i];
+                        console.log(chapter);
+                    }
+                }
+                res.status(200).json(
+                    chapter
+                );
+            })
+            .catch(
+                err => {
+                    console.log(err);
+                    res.status(500).json({ error: err });
+                }
+            );
+    }
+    /**
+     * get chapters by courseId
+     */
+exports.getChaptersByCourseId = (req, res) => {
+    const courseId = req.params.courseId;
+    Course
+        .findById(courseId)
+        .select("chapters")
+        .then(
+            chapters => {
+
+                if (!chapters) {
+                    return res.status(404).json({
+                        message: "Chapters not found !",
+                    })
+                }
+
+                res.status(200).json(
+                    chapters
+                );
+            })
         .catch(
             err => {
                 console.log(err);
-                res.status(500).json({ error: err });
+                res.status(500).json({
+                    error: err
+                });
             }
         );
-
 }

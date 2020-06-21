@@ -76,25 +76,10 @@ mat-card-title {
     vertical-align: middle
 }
 
-.user-info-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 6px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
 .sad-image-container {
     height: 50px;
     width: 50px;
     vertical-align: middle
-}
-
-.user-image-container {
-    height: 36px;
-    width: 36px;
 }
 
 .avatar {
@@ -126,4 +111,43 @@ mat-card-title {
     font-size: 15px;
     line-height: 14px;
     font-weight: 400;
+}
+
+.user-image-container {
+    height: 36px;
+    width: 36px;
+}
+
+.user-info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.documentation-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.header-image {
+    //background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    width: 25px;
+    height: 25px;
+    background-size: cover;
+}
+
+.add-student-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    img {
+        width: 24px;
+        height: 24px;
+        display: block;
+        cursor: pointer;
+    }
 }

@@ -1,10 +1,10 @@
 <div class="app-layout-wrapper">
     <mat-tab-group mat-stretch-tabs>
         <mat-tab label="Flux">
+            <div class="progress-spinner-container" *ngIf="isLoading">
+                <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
+            </div>
             <div class="tab-content-container">
-                <div class="progress-spinner-container" *ngIf="isLoading">
-                    <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
-                </div>
                 <mat-card class="flux-card">
                     <mat-card-header>
                         <mat-card-title>
@@ -15,9 +15,30 @@
                     <mat-card-content>
                     </mat-card-content>
                 </mat-card>
+                <div class="card-container">
+                    <mat-card class="chapters-card" *ngFor="let chapter of course.chapters">
+                        <mat-card-header>
+
+                            <mat-card-subtitle>
+                                <div mat-card-avatar class="header-image">
+                                    <img class="documentation-icon" src="assets/imgs/book.png">
+                                </div>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p class="chapter-name">{{ userName }} a publié un nouveau chapitre : {{ chapter.chapterName }}</p>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
                 <mat-card class="flux-posts-card">
                     <mat-card-content>
-                        <p>Partager une information avec votre classe... </p>
+                        <div class="sad-image-container">
+                            <img class="sad-emoji" src="assets/imgs/chat.png">
+                        </div>
+                        <div class="sad-details-container">
+                            <p>Partager une information avec votre classe... </p>
+                        </div>
+
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -26,7 +47,8 @@
             <div class="progress-spinner-container" *ngIf="isLoading">
                 <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
             </div>
-            <div class="add-chapter" *ngIf="!isLoading">
+
+            <div class="add-chapter" *ngIf="!isLoading && course.chapters && course.chapters.length > 0">
                 <button mat-raised-button class="add-chapter-btn" (click)="openNewChapterDialog()">
                   Ajouter un chapitre
                 </button>
@@ -34,7 +56,7 @@
 
             <div *ngIf="!isLoading">
                 <div class="tab-content-container" *ngIf="!course.chapters || course.chapters.length <= 0">
-                    <mat-card class="create-chapters-card">
+                    <mat-card class="create-chapters-card clickable-card" (click)="openNewChapterDialog()">
                         <mat-card-content>
                             <div class="sad-container">
                                 <div class="sad-image-container">
@@ -49,57 +71,58 @@
                     </mat-card>
                 </div>
                 <div class="tab-content-container" *ngIf="course.chapters && course.chapters.length > 0">
-                    <mat-card class="chapters-card" *ngFor="let chapter of course.chapters; let i = index;">
+                    <div class="card-container" *ngFor="let chapter of course.chapters">
+                        <mat-card class="chapters-card clickable-card" (click)="navigateToChapterDetails(course._id, chapter._id)">
 
-                        <mat-card-header>
-                            <mat-card-title>
-                                <p class="chapter-name">{{ chapter.chapterName }}</p>
-                                <!-- <div class="course-menu-button-container" (click)="$event.stopPropagation()" [matMenuTriggerFor]="chapterMenu" [matMenuTriggerData]="{ formIndex: i }">
-                                    <mat-icon>more_vert</mat-icon>
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <p class="chapter-name">{{ chapter.chapterName }}</p>
+                                </mat-card-title>
+
+                            </mat-card-header>
+                            <hr>
+                            <mat-card-content *ngIf="!chapter.content || chapter.content.length <= 0 ">
+
+                                <div class="sad-container">
+                                    <div class="sad-image-container">
+                                        <img class="sad-emoji" src="assets/imgs/sad.png">
+                                    </div>
+                                    <div class="sad-details-container">
+                                        <p>Ce chapitre ne contient pas de contenu! </p>
+                                        <h3> Ajouter du contenu à votre chapitre... </h3>
+                                    </div>
                                 </div>
-                                <mat-menu #chapterMenu="matMenu">
-                                    <button mat-menu-item>
-                                    <mat-icon>visibility</mat-icon><span>Afficher le cours</span>
-                                    </button>
-                                    <button mat-menu-item>
-                                        <mat-icon>create</mat-icon><span>Modifier le cours</span>
-                                    </button>
-                                    <button mat-menu-item>
-                                        <mat-icon>delete</mat-icon><span>Supprimer le cours</span>
-                                    </button>
-                                </mat-menu> -->
-                            </mat-card-title>
 
-                        </mat-card-header>
-                        <hr>
-                        <mat-card-content *ngIf="!chapter.content || chapter.content.length <= 0 ">
+                            </mat-card-content>
+                            <mat-card-content *ngIf="chapter.content && chapter.content.length > 0 ">
+                                <mat-list *ngFor="let content of chapter.content,  let lastItem = last;">
 
-                            <div class="sad-container">
-                                <div class="sad-image-container">
-                                    <img class="sad-emoji" src="assets/imgs/sad.png">
-                                </div>
-                                <div class="sad-details-container">
-                                    <p>Ce chapitre ne contient pas de contenu! </p>
-                                    <h3> Ajouter du contenu à votre chapitre... </h3>
-                                </div>
-                            </div>
+                                    <mat-list-item>
+                                        <img class="documentation-icon" src="assets/imgs/book.png">
+                                        <p class="chapter-name">
+                                            {{ userName }} ajouté un nouveau contenu à ce chapitre {{ chapter.chapterName }}
+                                        </p>
 
-                        </mat-card-content>
-                        <mat-card-content *ngIf="chapter.content && chapter.content.length > 0 ">
+                                    </mat-list-item>
+                                    <mat-divider *ngIf="!lastItem"></mat-divider>
 
+                                </mat-list>
 
-                        </mat-card-content>
-                    </mat-card>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
                 </div>
             </div>
+
         </mat-tab>
 
 
         <mat-tab label="Personnes">
+            <div class="progress-spinner-container" *ngIf="isLoading">
+                <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
+            </div>
             <div class="tab-content-container">
-                <div class="progress-spinner-container" *ngIf="isLoading">
-                    <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
-                </div>
+
                 <mat-card class="flux-posts-card">
 
                     <mat-card-content>
@@ -120,10 +143,13 @@
                     </mat-card-content>
                 </mat-card>
                 <mat-card class="flux-posts-card">
-
+                    <div class="add-student-button">
+                        <img src="assets/imgs/add.png">
+                    </div>
                     <mat-card-content>
                         <mat-card-title class="person-card-title">
                             <h2>Étudiants</h2>
+
                         </mat-card-title>
                         <mat-selection-list #shoes>
                             <mat-list-option *ngFor="let shoe of typesOfShoes">

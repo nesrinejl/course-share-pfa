@@ -8,10 +8,11 @@ import { environment } from '../../environments/environment';
 
 import { Course } from '../models/course.model';
 
-import { HeaderComponent } from '.././components/app-layout/header/header.component'
 import { FETCHING_JSON_REQUESTS_HTTP_OPTIONS } from '../constants/http-options.constants';
-import { Chapter } from '../models/chapter.model';
 
+import { Chapter } from '../models/chapter.model';
+import { Content } from '../models/content.model';
+import { Document } from '../models/document.model';
 
 const backendUrl  = environment.apiUrl + '/courses';
 
@@ -49,11 +50,43 @@ export class CourseService {
     return this.http.get<Course>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
 
   }
+
   getCourseId(){
     return this.course;
   }
 
   addChapter(chapter: any, courseId: string): Observable<any>{
     return this.http.post<any>(backendUrl + '/' + courseId +'/chapters', chapter);
+  }
+
+  getChapterById(chapterId: string, courseId: string) : Observable<Chapter>{
+
+    const url = backendUrl +'/' +  courseId +'/chapters/' + chapterId;
+
+    return this.http.get<Chapter>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
+
+  }
+
+  getChaptersByCourseId(courseId: string): Observable<any>{
+    const url = backendUrl +'/' +  courseId +'/chapters/';
+
+    return this.http.get<any>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
+
+  }
+
+  addContent(chapterId: string, courseId: string,  content: string, documents: Document[]): Observable<any>{
+    const contentData = new FormData();
+    contentData.append("content", content);
+
+    documents.forEach((document) => {
+      contentData.append("documentTypes", document.documentType);
+      contentData.append("documents", document.file);
+    });
+
+    console.log(contentData.getAll('content'));
+    console.log(contentData.getAll('documents'));
+
+
+    return this.http.post<Content>(backendUrl + '/' + courseId +'/chapters/' + chapterId  + '/add-content', contentData);
   }
 }

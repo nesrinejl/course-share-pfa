@@ -1,0 +1,101 @@
+<div class="app-layout-header">
+    <div class="app-layout-wrapper">
+        <h1>{{ course.courseName }}</h1>
+    </div>
+</div>
+
+<div class="progress-spinner-container" *ngIf="isLoading">
+    <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
+</div>
+<div class="app-layout-wrapper-chapter">
+
+    <mat-sidenav-container class="mat-sidenav-container">
+        <mat-sidenav class="mat-sidenav" mode="side" opened>
+            <mat-selection-list [multiple]="false">
+                <mat-list-option class="chapter-list" (click)="navigateToCourse(course._id)">Tous les chapitres</mat-list-option>
+                <mat-list-option *ngFor="let chapter of course.chapters">
+                    <p (click)="navigateToChapterDetails(course._id, chapter._id)">{{ chapter.chapterName }}</p>
+                </mat-list-option>
+            </mat-selection-list>
+        </mat-sidenav>
+        <mat-sidenav-content class="mat-sidenav-content">
+            <div class="card-container">
+                <mat-card class="chapters-card  clickable-card" (click)="navigateToAddContent(course._id, chapter._id)" routerLinkActive="router-link-active">
+
+                    <mat-card-header>
+                        <mat-card-title>
+                            <p class="chapter-name">{{ chapter.chapterName }}</p>
+
+                        </mat-card-title>
+
+                    </mat-card-header>
+                    <hr>
+                    <mat-card-content>
+
+                        <div class="sad-container">
+                            <div class="sad-image-container">
+                                <img class="sad-emoji" src="assets/imgs/news.png">
+                            </div>
+                            <div class="sad-details-container">
+                                <h3> Ajouter du contenu à votre chapitre... </h3>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="card-container" *ngIf="chapter.content && chapter.content.length > 0 ">
+                <mat-card class="chapters-content-card" *ngFor="let content of chapter.content">
+                    <mat-card-header>
+                        <mat-card-subtitle>{{ currentUser.lastName + " " + currentUser.firstName }} </mat-card-subtitle>
+                        <div mat-card-avatar class="header-user-image">
+                            <img src="assets/imgs/profile.png">
+                        </div>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <mat-card class='mat-card-chapters-content'>
+
+                            <p>{{ content.content }}</p>
+
+                        </mat-card>
+
+                        <!--
+                        <div *ngFor="let document of content.documents">
+                            <p>Hello</p>
+                            <p>{{ document.documentType }}</p>
+                            <div [ngSwitch]="document.documentType">
+                                <div ngSwitchCase="IMAGE">
+                                    <div class="document-type-container">
+                                        <div class="document-type-container">
+                                            <img src="assets/imgs/photo.png">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ngSwitchCase="VIDEO">
+                                    <div class="document-type-container">
+                                        <img src="assets/imgs/music-and-multimedia.png">
+                                    </div>
+                                </div>
+                                <div ngSwitchCase="URL">
+                                    <div class="document-type-container">
+                                        <img src="assets/imgs/link.png">
+                                    </div>
+                                </div>
+                                <div ngSwitchCase="SOUND">
+                                    <div class="document-type-container">
+                                        <img src="assets/imgs/speaker.png">
+                                    </div>
+                                </div>
+                                <div ngSwitchCase="FILE">
+                                    <div class="document-type-container">
+                                        <img src="assets/imgs/file-and-folders.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>

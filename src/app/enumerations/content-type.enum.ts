@@ -1,6 +1,6 @@
 export enum ContentTypeEnum {
 
-  DOCUMENTATION = 'Documentation',
+  DOCUMENTATION = 'DOCUMENTATION',
   TASK = 'Task',
   QUESTIONNAIRE = 'Questionnaire'
 

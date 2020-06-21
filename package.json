@@ -29,6 +29,9 @@
     "mongoose": "^5.9.12",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "multiparty": "^4.2.1",
+    "multiparty-express": "^0.1.9",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

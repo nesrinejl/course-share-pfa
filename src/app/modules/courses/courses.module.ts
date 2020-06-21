@@ -11,6 +11,7 @@ import { CourseComponent } from './course/course.component';
 import { CoursesListComponent } from './courses-list/courses-list.component';
 import { NewChapterComponent } from './new-chapter/new-chapter.component';
 import { NewContentComponent } from './new-content/new-content.component';
+import { ChapterComponent } from './chapter/chapter.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { NewContentComponent } from './new-content/new-content.component';
     CourseComponent,
     CoursesListComponent,
     NewChapterComponent,
-    NewContentComponent
+    NewContentComponent,
+    ChapterComponent
 
   ],
   entryComponents: [

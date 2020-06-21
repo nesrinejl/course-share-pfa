@@ -10,7 +10,16 @@
     justify-content: flex-start;
     .app-layout-content {
         height: 100%;
-        background-color: #fafafa;
+        background-color: #f6f7fb;
+        .app-layout-header {
+            width: 100%;
+            background: #03a4ff;
+            color: white;
+            opacity: 0.5;
+            h1 {
+                margin-bottom: 0px !important;
+            }
+        }
         .app-layout-wrapper {
             width: 60%;
             margin: 0 auto;

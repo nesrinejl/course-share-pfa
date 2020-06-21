@@ -10,7 +10,8 @@ import { UserData } from '../../../models/user.model';
 @Component({
   selector: 'app-courses-list',
   templateUrl: './courses-list.component.html',
-  styleUrls: ['./courses-list.component.scss']
+  styleUrls: ['./courses-list.component.scss'],
+
 })
 export class CoursesListComponent implements OnInit {
 
@@ -53,7 +54,7 @@ export class CoursesListComponent implements OnInit {
   }
 
   navigateToCourseDetails(courseId: string) {
-    this.router.navigateByUrl('/teacher/courses/course/' + courseId);
+    this.router.navigateByUrl('/teacher/courses/' + courseId);
   }
 
 }

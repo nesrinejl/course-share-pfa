@@ -5,6 +5,8 @@ import { CoursesComponent } from './courses.component';
 
 import { CourseComponent } from './course/course.component';
 import { CoursesListComponent } from './courses-list/courses-list.component';
+import { ChapterComponent } from './chapter/chapter.component';
+import { NewContentComponent } from './new-content/new-content.component';
 
 
 const coursesRoutes: Routes = [
@@ -17,8 +19,16 @@ const coursesRoutes: Routes = [
         component: CoursesListComponent
       },
       {
-        path: 'course/:courseId',
+        path: ':courseId',
         component: CourseComponent
+      },
+      {
+        path: ':courseId/chapters/:chapterId',
+        component: ChapterComponent
+      },
+      {
+        path: ':courseId/chapters/:chapterId/add-content',
+        component: NewContentComponent
       }
     ]
   }
