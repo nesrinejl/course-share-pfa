@@ -77,7 +77,7 @@ export class NewContentComponent implements OnInit {
     // if (this.addContentForm.invalid){
     //   return;
     // }
-    console.log(this.documents);
+    //console.log(this.documents);
     this.courseService.addContent(this.chapterId, this.courseId,  contentData.content, this.documents.value).subscribe(
       (response: any) => {
         this.snackBar.open('Le contenu a été ajouté à ce chapitre avec succès!');
@@ -150,9 +150,13 @@ export class NewContentComponent implements OnInit {
 
   onImagePicked(event: Event){
     const file = (event.target as HTMLInputElement).files[0];
-    console.log(this.addContentForm.patchValue({file: file}));
     this.addContentForm.patchValue({file: file});
-    this.documents.get('file').updateValueAndValidity();
+    for (let i=0; i<this.documents.controls.length; i++){
+
+      this.documents.controls[i].get('file').updateValueAndValidity();
+      //this.documents.get('file').updateValueAndValidity();
+    }
+
     // adding image Preview url
     const reader = new FileReader();
     reader.onload = () => {

@@ -136,24 +136,34 @@ exports.addContent = async(req, res, next) => {
 
             for (let i = 0; i < course.chapters.length; i++) {
                 if (course.chapters[i]._id == chapterId) {
-                    // for (let j = 0; j < course.chapters[i].content.documents.length; j++) {
 
-                    //     course.chapters[i].content.documents[j].file = url + '/images/' + req.file.filename;
-
-                    // }
-                    var Array = req.body.documents;
-                    console.log(req.body);
-
-                    console.log(Array);
-                    // console.log(Array[0]["documentType"]);
-                    // console.log(Array[0]["file"]);
+                    var documents = [];
+                    var documentTypes = req.body.documentTypes;
+                    const documentFiles = req.files;
+                    if (Array.isArray(documentTypes)) {
+                        for (let j = 0; j < documentTypes.length; j++) {
+                            documents.push({
+                                documentType: documentTypes[j],
+                                file: documentFiles[j].filename
+                            });
+                        }
+                    }
+                    else{
+                      documentTypes = [req.body.documentTypes];
+                      for (let j = 0; j < documentTypes.length; j++) {
+                        documents.push({
+                            documentType: documentTypes[j],
+                            file: documentFiles[j].filename
+                        });
+                    }
+                    }
+                    console.log(documents);
 
                     course.chapters[i].content.push({
                         contentType: req.body.contentType,
                         content: req.body.content,
-                        documents: req.body.documents,
+                        documents: documents,
                     });
-                    console.log(req.file);
                 }
             }
             course.save().then(

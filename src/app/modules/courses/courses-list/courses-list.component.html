@@ -1,5 +1,5 @@
 <div class="app-layout-wrapper">
-    <mat-tab-group mat-stretch-tabs>
+    <mat-tab-group>
         <mat-tab>
             <ng-template mat-tab-label>
                 Mes cours
@@ -41,7 +41,8 @@
                             <p class="course-description">{{ course.courseDescription }}</p>
                             <p class="student-number">0 étudiant</p>
                             <div class="course-menu-button-container" (click)="$event.stopPropagation()" [matMenuTriggerFor]="courseMenu" [matMenuTriggerData]="{ formIndex: i }">
-                                <mat-icon>more_vert</mat-icon>
+
+                                <mat-icon class="bleu-icon">more_vert</mat-icon>
                             </div>
                             <mat-menu #courseMenu="matMenu">
                                 <!-- <button mat-menu-item>

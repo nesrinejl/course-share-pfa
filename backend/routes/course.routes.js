@@ -6,7 +6,8 @@ const checkAuth = require('../middleware/checkAuth');
 const extractFile = require('../middleware/file.middleware');
 const multer = require('multer');
 
-var upload = multer({ dest: 'uploads/' })
+var upload = multer({ dest: 'backend/uploads/' });
+
 const router = express.Router();
 
 /**
@@ -32,7 +33,7 @@ router.post('/:courseId/chapters', checkAuth, CourseController.addChapter);
 /**
  * add content to chapter route
  */
-router.post('/:courseId/chapters/:chapterId/add-content', checkAuth, upload.single('file'), CourseController.addContent);
+router.post('/:courseId/chapters/:chapterId/add-content', checkAuth, extractFile.array('documents', 12), CourseController.addContent);
 /**
  * get chapter by Id route
  */

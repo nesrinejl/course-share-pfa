@@ -74,7 +74,7 @@ export class CourseService {
 
   }
 
-  addContent(chapterId: string, courseId: string,  content: string, documents: Document[]): Observable<any>{
+  addContent(chapterId: string, courseId: string,  content: string, documents: Document[]): Observable<Content>{
     const contentData = new FormData();
     contentData.append("content", content);
 
