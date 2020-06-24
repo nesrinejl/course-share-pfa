@@ -74,18 +74,17 @@ export class CourseService {
 
   }
 
-  addContent(chapterId: string, courseId: string,  content: string, documents: Document[]): Observable<Content>{
+  addContent(chapterId: string, courseId: string,  content: string, contentType: string, contentTitle: string,  documents: Document[]): Observable<Content>{
     const contentData = new FormData();
+    contentData.append("contentTitle", contentTitle);
     contentData.append("content", content);
-
+    contentData.append("contentType", contentType);
     documents.forEach((document) => {
       contentData.append("documentTypes", document.documentType);
       contentData.append("documents", document.file);
     });
-
     console.log(contentData.getAll('content'));
-    console.log(contentData.getAll('documents'));
-
+    console.log(contentData.getAll('documents').values());
 
     return this.http.post<Content>(backendUrl + '/' + courseId +'/chapters/' + chapterId  + '/add-content', contentData);
   }

@@ -20,6 +20,10 @@ const documentSchema = mongoose.Schema({
  * Content Schema
  **/
 const contentSchema = mongoose.Schema({
+    contentTitle: {
+      type: String,
+      //required: true
+    },
     contentType: {
         type: String,
         enum: ["DOCUMENTATION", "TASK", "QUESTIONNAIRE"],
@@ -30,7 +34,7 @@ const contentSchema = mongoose.Schema({
     },
     documents: [documentSchema],
 
-});
+}, { timestamps: true });
 
 /**
  * chapter Schema

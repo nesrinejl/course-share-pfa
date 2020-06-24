@@ -25,7 +25,6 @@
                     <mat-card-header>
                         <mat-card-title>
                             <p class="chapter-name">{{ chapter.chapterName }}</p>
-
                         </mat-card-title>
 
                     </mat-card-header>
@@ -46,7 +45,10 @@
             <div class="card-container" *ngIf="chapter.content && chapter.content.length > 0 ">
                 <mat-card class="chapters-content-card" *ngFor="let content of chapter.content">
                     <mat-card-header>
-                        <mat-card-subtitle>{{ currentUser.lastName + " " + currentUser.firstName }} </mat-card-subtitle>
+                        <mat-card-title>
+                          <p class="user-name">{{ currentUser.lastName + " " + currentUser.firstName }}</p>
+                        </mat-card-title>
+                        <mat-card-subtitle>{{ content.createdAt | date:'medium'}}</mat-card-subtitle>
                         <div mat-card-avatar class="header-user-image">
                             <img src="assets/imgs/profile.png">
                         </div>

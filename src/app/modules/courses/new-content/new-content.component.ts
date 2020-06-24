@@ -29,6 +29,7 @@ export class NewContentComponent implements OnInit {
   currentUser: UserData;
   documentsArray : Document[] = [];
 
+  contentType = ContentTypeEnum.DOCUMENTATION;
   chapterId: string;
   courseId: string;
   imagePreview: string;
@@ -47,15 +48,14 @@ export class NewContentComponent implements OnInit {
 
   addContentForm: FormGroup = this.formBuilder.group({
 
+    contentTitle: ['',  [Validators.required, Validators.maxLength(50)] , [ blankValidator() ]],
     content: ['',  [Validators.required, Validators.maxLength(500)] , [ blankValidator() ]],
-    contentType: [ ContentTypeEnum.DOCUMENTATION ],
+    //contentType: [ ContentTypeEnum.DOCUMENTATION ],
     documents: this.formBuilder.array([])
 
   });
 
   get documents() {
-
-
     return this.addContentForm.get('documents') as FormArray;
   }
 
@@ -74,11 +74,11 @@ export class NewContentComponent implements OnInit {
   onCreateContent(){
 
     const contentData: Content = { ...this.addContentForm.value };
-    // if (this.addContentForm.invalid){
-    //   return;
-    // }
-    //console.log(this.documents);
-    this.courseService.addContent(this.chapterId, this.courseId,  contentData.content, this.documents.value).subscribe(
+    if (this.addContentForm.invalid){
+      return;
+    }
+    console.log(this.documents.value)
+    this.courseService.addContent(this.chapterId, this.courseId,  contentData.content, this.contentType, contentData.contentTitle, this.documents.value).subscribe(
       (response: any) => {
         this.snackBar.open('Le contenu a été ajouté à ce chapitre avec succès!');
 
@@ -131,10 +131,9 @@ export class NewContentComponent implements OnInit {
 
     this.documents.push(this.formBuilder.group({
         documentType: [ '', Validators.required ],
-        file: ['', [Validators.required], [mimeType]],
-        //file : new FormControl(null, {validators: [Validators.required], asyncValidators: [mimeType]})
+        file: ['', [Validators.required]],
     }));
-    console.log(this.documents.controls.values);
+
     this.showDocumentCard = true;
   }
 
@@ -148,21 +147,49 @@ export class NewContentComponent implements OnInit {
 
   }
 
-  onImagePicked(event: Event){
-    const file = (event.target as HTMLInputElement).files[0];
-    this.addContentForm.patchValue({file: file});
-    for (let i=0; i<this.documents.controls.length; i++){
 
-      this.documents.controls[i].get('file').updateValueAndValidity();
-      //this.documents.get('file').updateValueAndValidity();
+  onFileChange(event: any, documentIndex: number, documentType: string) {
+
+    // verify if there is a file
+    if (!event.target) {
+      return;
+    }
+    if (!event.target.files) {
+      return;
+    }
+    if (event.target.files.length !== 1) {
+      return;
     }
 
-    // adding image Preview url
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.imagePreview = reader.result as string;
-    };
-    reader.readAsDataURL(file);
+    // get that file from the event
+    const file: File = event.target.files[0];
+
+    // image validation
+    if (documentType === 'IMAGE' && file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif'){
+      this.snackBar.open('Le type de ce fichier est invalide! Le type de l\'image ne peut être que jpeg, jpg, png ou gif');
+    }
+    // file validation
+    if (documentType === 'FILE' && file.type !== 'text/plain' && file.type !== 'application/pdf' && file.type !== 'application/x-rar-compressed' && file.type !== 'application/zip' && file.type !== 'application/vnd.ms-powerpoint' && file.type !== 'application/vnd.oasis.opendocument.text' && file.type !== 'application/msword'){
+      this.snackBar.open('Le type de ce fichier est invalide! Le type fichier ne peut être que pdf, rar, zip, doc, odt ou gif');
+    }
+    // sound validation
+    if (documentType === 'SOUND' && file.type !== 'audio/mpeg'){
+      this.snackBar.open('Le type de ce fichier est invalide! Le type de fichier doit être en mpeg');
+    }
+    // video validation
+    if (documentType === 'VIDEO' && file.type !== 'video/mpeg'){
+      this.snackBar.open('Le type de ce fichier est invalide! Le type de fichier doit être en mp4');
+    }
+    // add the file to the form group
+    this.documents.at(documentIndex).get('file').setValue(file);
+
+    console.log(this.documents);
+
   }
+
+  onDocumentTypeSelectionChange(index: number){
+
+  }
+
 
 }

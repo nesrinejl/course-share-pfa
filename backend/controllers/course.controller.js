@@ -140,26 +140,34 @@ exports.addContent = async(req, res, next) => {
                     var documents = [];
                     var documentTypes = req.body.documentTypes;
                     const documentFiles = req.files;
-                    if (Array.isArray(documentTypes)) {
+                    console.log(documentFiles);
+                    if (documentFiles.length >= 1){
+                      if (Array.isArray(documentTypes)) {
                         for (let j = 0; j < documentTypes.length; j++) {
+                          console.log(documentFiles[j].filename);
                             documents.push({
                                 documentType: documentTypes[j],
                                 file: documentFiles[j].filename
                             });
                         }
+                      }
+                      else{
+                        documentTypes = [req.body.documentTypes];
+                        for (let j = 0; j < documentTypes.length; j++) {
+                          console.log(documentFiles[j].filename);
+
+                          documents.push({
+                              documentType: documentTypes[j],
+                              file: documentFiles[j].filename
+                          });
+                        }
+                      }
                     }
-                    else{
-                      documentTypes = [req.body.documentTypes];
-                      for (let j = 0; j < documentTypes.length; j++) {
-                        documents.push({
-                            documentType: documentTypes[j],
-                            file: documentFiles[j].filename
-                        });
-                    }
-                    }
-                    console.log(documents);
+
+                    console.log(req.body.contentTitle);
 
                     course.chapters[i].content.push({
+                        contentTitle: req.body.contentTitle,
                         contentType: req.body.contentType,
                         content: req.body.content,
                         documents: documents,
@@ -202,7 +210,6 @@ exports.getChapterById = (req, res, next) => {
                 for (let i = 0; i < course.chapters.length; i++) {
                     if (course.chapters[i]._id == chapterId) {
                         chapter = course.chapters[i];
-                        console.log(chapter);
                     }
                 }
                 res.status(200).json(
