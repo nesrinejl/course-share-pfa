@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AppLayoutComponent } from './components/app-layout/app-layout.component';
 import { HeaderComponent } from './components/app-layout/header/header.component';
 
+
 // import { AuthService } from './services/auth.service';
 import { AngularMaterialModule } from './angular-material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,7 +34,7 @@ import { CourseService } from './services/course.service'
     BrowserAnimationsModule,
     AngularMaterialModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
 
   ],
   providers: [

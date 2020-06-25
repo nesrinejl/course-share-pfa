@@ -36,7 +36,7 @@ export class CoursesListComponent implements OnInit {
     this.courseService.getCoursesByUserId(currentUser._id).subscribe(
       (courses: Course[]) => {
         this.courses = courses;
-          this.isLoading = false;
+        this.isLoading = false;
       },
       (error: any) => {
         console.log(error);
@@ -45,12 +45,8 @@ export class CoursesListComponent implements OnInit {
       }
     );
   }
-  loadCourses() {
-
-  }
 
   onCreateNewCourse() {
-    //this.headerComponent.openNewCourseDialog();
   }
 
   navigateToCourseDetails(courseId: string) {

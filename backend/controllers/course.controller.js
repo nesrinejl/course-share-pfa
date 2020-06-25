@@ -145,9 +145,10 @@ exports.addContent = async(req, res, next) => {
                       if (Array.isArray(documentTypes)) {
                         for (let j = 0; j < documentTypes.length; j++) {
                           console.log(documentFiles[j].filename);
+                          filePath = url + '/uploads/' + documentFiles[j].filename;
                             documents.push({
                                 documentType: documentTypes[j],
-                                file: documentFiles[j].filename
+                                file: filePath
                             });
                         }
                       }
@@ -155,10 +156,11 @@ exports.addContent = async(req, res, next) => {
                         documentTypes = [req.body.documentTypes];
                         for (let j = 0; j < documentTypes.length; j++) {
                           console.log(documentFiles[j].filename);
+                          filePath = url + '/uploads/' + documentFiles[j].filename;
 
                           documents.push({
                               documentType: documentTypes[j],
-                              file: documentFiles[j].filename
+                              file: filePath
                           });
                         }
                       }

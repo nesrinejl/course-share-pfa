@@ -100,8 +100,50 @@
         cursor: pointer;
     }
 }
-.user-name{
+.card-title{
   font-size: 15px;
   line-height: 14px;
 
 }
+
+.info-text{
+  text-align: center;
+}
+.document-file{
+  height: 250px;
+  width: 250px;
+  img{
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.video-container{
+
+  height: 80%;
+  width: 80%;
+  video{
+    width: 100%;
+    height: 100%;
+  }
+}
+.audio-container{
+
+  height: 80%;
+  width: 80%;
+
+    audio{
+      width: 100%;
+      height: 100%;
+    }
+
+
+}
+.audio-container,
+.document-file,
+.video-container{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+

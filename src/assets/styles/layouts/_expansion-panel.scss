@@ -1,0 +1,27 @@
+
+
+.content-headers-align .mat-expansion-panel-header-title,
+.content-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.content-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.document-type-icon{
+  height: 24px;
+  width: 24px;
+}
+mat-accordion{
+  box-shadow: none;
+}
+.mat-expansion-panel:not([class*=mat-elevation-z]){
+  box-shadow: none;
+  border: 1px solid #b8b8b8;
+}

@@ -15,6 +15,7 @@ import { Chapter } from '../../../models/chapter.model';
 })
 export class ChapterComponent implements OnInit {
 
+
   isLoading = true;
   panelOpenState = false;
 
@@ -95,5 +96,6 @@ export class ChapterComponent implements OnInit {
       }
     );
   }
+
 
 }

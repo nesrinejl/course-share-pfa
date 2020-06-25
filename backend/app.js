@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const path = require('path');
 
 const userRoutes = require('./routes/user.routes');
 const courseRoutes = require('./routes/course.routes');
@@ -41,6 +42,8 @@ app.use((req, res, next) => {
 /**Body Parser */
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use('/uploads', express.static(path.join('backend/uploads')));
 
 /**
  * user routes

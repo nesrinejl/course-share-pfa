@@ -26,7 +26,6 @@
                         <mat-card-title>
                             <p class="chapter-name">{{ chapter.chapterName }}</p>
                         </mat-card-title>
-
                     </mat-card-header>
                     <hr>
                     <mat-card-content>
@@ -46,55 +45,81 @@
                 <mat-card class="chapters-content-card" *ngFor="let content of chapter.content">
                     <mat-card-header>
                         <mat-card-title>
-                          <p class="user-name">{{ currentUser.lastName + " " + currentUser.firstName }}</p>
+                          <p class="card-title">{{ currentUser.lastName + " " + currentUser.firstName }}</p>
                         </mat-card-title>
                         <mat-card-subtitle>{{ content.createdAt | date:'medium'}}</mat-card-subtitle>
                         <div mat-card-avatar class="header-user-image">
                             <img src="assets/imgs/profile.png">
                         </div>
                     </mat-card-header>
-
+                    <hr>
                     <mat-card-content>
-                        <mat-card class='mat-card-chapters-content'>
-
+                          <mat-card-title>
+                            <p class="card-title">{{ content.contentTitle }}</p>
+                          </mat-card-title>
                             <p>{{ content.content }}</p>
+                            <mat-accordion class="content-headers-align" multi="true" *ngIf="content.documents.length > 0 ">
+                              <mat-expansion-panel  *ngFor="let document of content.documents">
+                                <mat-expansion-panel-header>
+                                  <mat-panel-title>
+                                    {{ document.documentType }}
+                                  </mat-panel-title>
+                                  <mat-panel-description *ngIf="document.documentType === 'IMAGE'">
+                                    <mat-panel-description>
+                                      Voir l'image
+                                        <img class="document-type-icon" src="assets/imgs/photo.png">
+                                    </mat-panel-description>
 
-                        </mat-card>
+                                  </mat-panel-description>
+                                  <mat-panel-description *ngIf="document.documentType === 'SOUND'">
+                                    <mat-panel-description>
+                                      Voir le podcast
+                                        <img class="document-type-icon" src="assets/imgs/speaker.png">
+                                    </mat-panel-description>
 
-                        <!--
-                        <div *ngFor="let document of content.documents">
-                            <p>Hello</p>
-                            <p>{{ document.documentType }}</p>
-                            <div [ngSwitch]="document.documentType">
-                                <div ngSwitchCase="IMAGE">
-                                    <div class="document-type-container">
-                                        <div class="document-type-container">
-                                            <img src="assets/imgs/photo.png">
-                                        </div>
-                                    </div>
+                                  </mat-panel-description>
+                                  <mat-panel-description *ngIf="document.documentType === 'VIDEO'">
+                                    <mat-panel-description>
+                                      Voir la vidéo
+                                        <img class="document-type-icon" src="assets/imgs/music-and-multimedia.png">
+                                    </mat-panel-description>
+
+                                  </mat-panel-description>
+                                  <mat-panel-description *ngIf="document.documentType === 'FILE'">
+                                    <mat-panel-description>
+                                      Voir le fichier
+                                        <img class="document-type-icon" src="assets/imgs/files-and-folders.png">
+                                    </mat-panel-description>
+                                  </mat-panel-description>
+                                </mat-expansion-panel-header>
+
+                                <div class="document-file" *ngIf="document.documentType === 'IMAGE'">
+                                  <img  [src]="document.file" [alt]="content.contentTitle">
                                 </div>
-                                <div ngSwitchCase="VIDEO">
-                                    <div class="document-type-container">
-                                        <img src="assets/imgs/music-and-multimedia.png">
-                                    </div>
+
+                                  <a [href]="document.file" *ngIf="document.documentType === 'FILE'">Consulter le fichier</a>
+                                  <pdf-viewer [src]="document.file"
+                                      [render-text]="true"
+                                      [show-all]="false"
+                                      [original-size]="true"
+                                      [autoresize]="true"
+                                      *ngIf="document.documentType === 'FILE'"
+                                  ></pdf-viewer>
+
+                                <div class="video-container" *ngIf="document.documentType === 'VIDEO'">
+                                  <video [src]="document.file"  controls></video>
                                 </div>
-                                <div ngSwitchCase="URL">
-                                    <div class="document-type-container">
-                                        <img src="assets/imgs/link.png">
-                                    </div>
+                                <div  *ngIf="document.documentType === 'SOUND'">
+                                      <audio
+                                          controls
+                                          [src]="document.file">
+                                              Your browser does not support the
+                                              <code>audio</code> element.
+                                      </audio>
                                 </div>
-                                <div ngSwitchCase="SOUND">
-                                    <div class="document-type-container">
-                                        <img src="assets/imgs/speaker.png">
-                                    </div>
-                                </div>
-                                <div ngSwitchCase="FILE">
-                                    <div class="document-type-container">
-                                        <img src="assets/imgs/file-and-folders.png">
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
+                              </mat-expansion-panel>
+                            </mat-accordion>
+                            <p class = "info-text mat-body-1" *ngIf="content.documents.length <= 0 ">Aucun document!</p>
                     </mat-card-content>
                 </mat-card>
             </div>

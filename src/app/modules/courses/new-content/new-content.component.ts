@@ -32,7 +32,7 @@ export class NewContentComponent implements OnInit {
   contentType = ContentTypeEnum.DOCUMENTATION;
   chapterId: string;
   courseId: string;
-  imagePreview: string;
+  filePreview: string;
 
   showDocumentCard = false;
   isCreator = false;
@@ -174,7 +174,7 @@ export class NewContentComponent implements OnInit {
     }
     // sound validation
     if (documentType === 'SOUND' && file.type !== 'audio/mpeg'){
-      this.snackBar.open('Le type de ce fichier est invalide! Le type de fichier doit être en mpeg');
+      this.snackBar.open('Le type de ce fichier est invalide! Le type de fichier doit être audio mpeg');
     }
     // video validation
     if (documentType === 'VIDEO' && file.type !== 'video/mpeg'){
@@ -184,7 +184,11 @@ export class NewContentComponent implements OnInit {
     this.documents.at(documentIndex).get('file').setValue(file);
 
     console.log(this.documents);
-
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.filePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
 
   onDocumentTypeSelectionChange(index: number){

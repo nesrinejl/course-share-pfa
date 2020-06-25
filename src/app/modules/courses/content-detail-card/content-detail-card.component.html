@@ -1,0 +1,17 @@
+<mat-accordion class="content-headers-align" multi="true" *ngIf="documents.length > 0 ">
+  <mat-expansion-panel  *ngFor="let document of documents">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ document.documentType }}
+      </mat-panel-title>
+      <mat-panel-description>
+        <mat-icon>account_circle</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <div class="document-file">
+      <img [src]="document.file" [alt]="document.documentType">
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class = "info-text mat-body-1" *ngIf="documents.length <= 0 ">Aucun document!</p>

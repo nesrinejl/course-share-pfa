@@ -37,7 +37,7 @@ router.post('/:courseId/chapters/:chapterId/add-content', checkAuth, extractFile
 /**
  * get chapter by Id route
  */
-router.get('/:courseId/chapters/:chapterId', checkAuth, CourseController.getChapterById);
+router.get('/:courseId/chapters/:chapterId', checkAuth, extractFile.array('documents', 12), CourseController.getChapterById);
 /**
  * get chapters by courseId route
  */

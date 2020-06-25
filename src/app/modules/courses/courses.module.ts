@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 import { CoursesRoutingModule } from './courses-routing.module';
 import { CoursesComponent } from './courses.component';
 import { NewCourseComponent } from './new-course/new-course.component';
@@ -12,6 +14,7 @@ import { CoursesListComponent } from './courses-list/courses-list.component';
 import { NewChapterComponent } from './new-chapter/new-chapter.component';
 import { NewContentComponent } from './new-content/new-content.component';
 import { ChapterComponent } from './chapter/chapter.component';
+import { ContentDetailCardComponent } from './content-detail-card/content-detail-card.component';
 
 @NgModule({
   imports: [
@@ -19,7 +22,8 @@ import { ChapterComponent } from './chapter/chapter.component';
     CommonModule,
     CoursesRoutingModule,
     AngularMaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PdfViewerModule
 
   ],
   declarations: [
@@ -30,7 +34,8 @@ import { ChapterComponent } from './chapter/chapter.component';
     CoursesListComponent,
     NewChapterComponent,
     NewContentComponent,
-    ChapterComponent
+    ChapterComponent,
+    ContentDetailCardComponent
 
   ],
   entryComponents: [

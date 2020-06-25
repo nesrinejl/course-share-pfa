@@ -6,8 +6,8 @@
     <div class="spacer"></div>
     <div *ngIf="userRole == 'Teacher'" [matMenuTriggerFor]="course">
         <button mat-button>
-      <mat-icon>add</mat-icon>
-    </button>
+          <mat-icon>add</mat-icon>
+        </button>
     </div>
     <mat-menu #course="matMenu">
         <button mat-menu-item (click)="openNewCourseDialog()" routerLinkActive="mat-primary">
