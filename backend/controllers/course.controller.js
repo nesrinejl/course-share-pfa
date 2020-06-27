@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const Course = require('../models/course.model');
 const Chapter = require('../models/course.model');
 
@@ -141,29 +142,28 @@ exports.addContent = async(req, res, next) => {
                     var documentTypes = req.body.documentTypes;
                     const documentFiles = req.files;
                     console.log(documentFiles);
-                    if (documentFiles.length >= 1){
-                      if (Array.isArray(documentTypes)) {
-                        for (let j = 0; j < documentTypes.length; j++) {
-                          console.log(documentFiles[j].filename);
-                          filePath = url + '/uploads/' + documentFiles[j].filename;
-                            documents.push({
-                                documentType: documentTypes[j],
-                                file: filePath
-                            });
-                        }
-                      }
-                      else{
-                        documentTypes = [req.body.documentTypes];
-                        for (let j = 0; j < documentTypes.length; j++) {
-                          console.log(documentFiles[j].filename);
-                          filePath = url + '/uploads/' + documentFiles[j].filename;
+                    if (documentFiles.length >= 1) {
+                        if (Array.isArray(documentTypes)) {
+                            for (let j = 0; j < documentTypes.length; j++) {
+                                console.log(documentFiles[j].filename);
+                                filePath = url + '/uploads/' + documentFiles[j].filename;
+                                documents.push({
+                                    documentType: documentTypes[j],
+                                    file: filePath
+                                });
+                            }
+                        } else {
+                            documentTypes = [req.body.documentTypes];
+                            for (let j = 0; j < documentTypes.length; j++) {
+                                console.log(documentFiles[j].filename);
+                                filePath = url + '/uploads/' + documentFiles[j].filename;
 
-                          documents.push({
-                              documentType: documentTypes[j],
-                              file: filePath
-                          });
+                                documents.push({
+                                    documentType: documentTypes[j],
+                                    file: filePath
+                                });
+                            }
                         }
-                      }
                     }
 
                     console.log(req.body.contentTitle);

@@ -33,6 +33,7 @@
     "multiparty": "^4.2.1",
     "multiparty-express": "^0.1.9",
     "ng2-pdf-viewer": "^6.3.0",
+    "nodemailer": "^6.4.10",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

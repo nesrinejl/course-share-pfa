@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators, FormGroup  } from '@angular/forms';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+
 import { AuthService } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
 
 import { blankValidator, customEmailValidator, passwordStrengthValidator } from '../../../utils/validators.util';
+import { UserRolesEnum } from 'src/app/enumerations/user-roles.enum';
 
 @Component({
   selector: 'app-signup',
@@ -13,14 +16,20 @@ import { blankValidator, customEmailValidator, passwordStrengthValidator } from 
 export class SignupComponent implements OnInit, OnDestroy {
 
   private authStatusSub: Subscription;
+  private token : string;
+  private courseId: string;
 
-  constructor(public authService: AuthService, private formBuilder: FormBuilder) {}
+  constructor(
+    public authService: AuthService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+  ) {}
 
   signUpForm: FormGroup = this.formBuilder.group({
     firstName: [ '', Validators.required, blankValidator() ],
     lastName: [ '', Validators.required, blankValidator() ],
     email: [ '', Validators.required, customEmailValidator() ],
-    role: [ '', Validators.required, blankValidator() ],
+    //role: [ '', Validators.required, blankValidator() ],
     password: [ '', Validators.required, passwordStrengthValidator() ],
     passwordConfirmation: [ '', Validators.required ]
   });
@@ -36,9 +45,20 @@ export class SignupComponent implements OnInit, OnDestroy {
       //   this.isLoading = false;
       // }
     );
-  }
-  onSignup(){
+    this.activatedRoute.paramMap.subscribe(
 
+      (paramMap: ParamMap) => {
+          this.token = paramMap.get('token');
+          // localStorage.setItem('token', this.token);
+          this.courseId = paramMap.get('courseId');
+          this.authService.setToken(this.token);
+          console.log(this.courseId);
+          console.log(this.token);
+      }
+    );
+  }
+
+  onSignup(){
     if (this.signUpForm.get('password').value !== this.signUpForm.get('passwordConfirmation').value) {
       this.signUpForm.get('passwordConfirmation').setErrors({ notIdentical: true });
       return;
@@ -46,16 +66,32 @@ export class SignupComponent implements OnInit, OnDestroy {
     if (this.signUpForm.invalid){
       return;
     }
-   // this.isLoading = true;
-    this.authService
+    console.log(this.token);
+    if (this.courseId && this.token){
+
+      this.authService
+        .createUser(
+          this.signUpForm.value.email,
+          this.signUpForm.value.password,
+          this.signUpForm.value.firstName,
+          this.signUpForm.value.lastName,
+          UserRolesEnum.STUDENT,
+          this.courseId
+        );
+    }else {
+      this.authService
       .createUser(
         this.signUpForm.value.email,
         this.signUpForm.value.password,
         this.signUpForm.value.firstName,
         this.signUpForm.value.lastName,
-        this.signUpForm.value.role
+        UserRolesEnum.TEACHER
       );
+    }
+   // this.isLoading = true;
+
   }
+
   ngOnDestroy(){
     this.authStatusSub
       .unsubscribe();

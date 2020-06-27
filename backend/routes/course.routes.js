@@ -43,4 +43,5 @@ router.get('/:courseId/chapters/:chapterId', checkAuth, extractFile.array('docum
  */
 
 router.get('/:courseId/chapters', checkAuth, CourseController.getChaptersByCourseId);
+
 module.exports = router;

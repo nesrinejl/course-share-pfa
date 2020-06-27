@@ -10,14 +10,21 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+
     }
     .mat-sidenav-content {
         width: 80%;
         height: 100%;
+
     }
     .mat-drawer-container {
         background: #f6f7fb;
     }
+    mat-list-option{
+      color: #615F5F;
+
+    }
+
 }
 
 .sad-container {
@@ -87,6 +94,7 @@
     border-top-right-radius: 4px !important;
     border-bottom-left-radius: 4px !important;
     border-bottom-right-radius: 4px !important;
+    color: #615F5F;
 }
 
 .document-type-container {

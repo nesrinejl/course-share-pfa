@@ -48,23 +48,28 @@ export class AuthService{
     return this.authStatusListener.asObservable();
   }
 
-  // object fel parametres
-  createUser(email: string, password: string, firstName: string, lastName: string, role: UserRolesEnum){
-    const userData:
-    UserData = {
+  createUser(email: string, password: string, firstName: string, lastName: string, role: UserRolesEnum, courseId?: string){
+    const userData: any = {
         email: email,
         password: password,
         firstName: firstName,
         lastName: lastName,
         role: role
     };
+    if (courseId) {
+      userData.courseId = courseId;
+    }
     this.http
       .post(BACKEND_URL + '/sign-up', userData)
       .subscribe(() => {
         this.router.navigate(["/auth/login"]);
+        localStorage.removeItem('token');
+        this.token = undefined;
         }, error => {
           this.authStatusListener.next(false);
         }
+
+
       );
   }
 
@@ -166,6 +171,10 @@ export class AuthService{
       expirationDate: new Date(expirationDate),
       user: user,
     }
+  }
+  setToken(token: string) {
+    this.token = token;
+    localStorage.setItem('token', token);
   }
 }
 

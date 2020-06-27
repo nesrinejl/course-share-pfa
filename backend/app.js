@@ -6,6 +6,7 @@ const path = require('path');
 
 const userRoutes = require('./routes/user.routes');
 const courseRoutes = require('./routes/course.routes');
+const enrollmentRoutes = require('./routes/enrollment.routes');
 
 const app = express();
 
@@ -53,6 +54,11 @@ app.use('/api/v1/user', userRoutes);
  * course routes
  */
 app.use('/api/v1/courses', courseRoutes);
+
+/**
+ * enrollment routes
+ */
+app.use('/api/v1/enrollments', enrollmentRoutes);
 
 app.use(express.static('public'));
 

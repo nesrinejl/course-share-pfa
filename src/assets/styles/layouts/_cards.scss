@@ -30,10 +30,9 @@ mat-card {
     mat-card-header {
         padding: 24px !important;
         margin: 0px !important;
-        //background: map-get($colors, primary) !important;
         padding-top: 60px !important;
-        border-top-right-radius: 2px;
-        border-top-left-radius: 2px;
+        // border-top-right-radius: 4px;
+        // border-top-left-radius: 4px;
         mat-card-title,
         mat-card-subtitle {
             font-weight: 300 !important;

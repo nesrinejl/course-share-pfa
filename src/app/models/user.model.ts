@@ -6,5 +6,5 @@ export interface UserData{
   firstName: string,
   lastName: string,
   password: string,
-  role: UserRolesEnum,
+  role?: UserRolesEnum,
 }
