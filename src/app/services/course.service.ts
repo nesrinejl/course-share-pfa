@@ -25,13 +25,13 @@ export class CourseService {
     private router: Router
   ) {}
 
-  createCourse(course: Course): Observable<any>{
+  createCourse(course: Course): Observable<any> {
 
     return this.http.post<any>(backendUrl + '/new-course', course);
 
   }
 // get course by userId (creator)
-  getCoursesByUserId(userId: string): Observable<Course[]>{
+  getCoursesByUserId(userId: string): Observable<Course[]> {
 
     const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
 
@@ -43,15 +43,15 @@ export class CourseService {
   }
 
   //get course by Id
-  getCourseById(courseId: string) : Observable<Course>{
+  getCourseById(courseId: string) : Observable<Course> {
 
     const url = backendUrl + '/' + courseId;
 
-    return this.http.get<Course>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
+    return this.http.get<Course>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS);
 
   }
 
-  getCourseId(){
+  getCourseId() {
     return this.course;
   }
 
@@ -59,22 +59,22 @@ export class CourseService {
     return this.http.post<any>(backendUrl + '/' + courseId +'/chapters', chapter);
   }
 
-  getChapterById(chapterId: string, courseId: string) : Observable<Chapter>{
+  getChapterById(chapterId: string, courseId: string) : Observable<Chapter> {
 
     const url = backendUrl +'/' +  courseId +'/chapters/' + chapterId;
 
-    return this.http.get<Chapter>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
+    return this.http.get<Chapter>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS);
 
   }
 
-  getChaptersByCourseId(courseId: string): Observable<any>{
+  getChaptersByCourseId(courseId: string): Observable<any> {
     const url = backendUrl +'/' +  courseId +'/chapters/';
 
     return this.http.get<any>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
 
   }
 
-  addContent(chapterId: string, courseId: string,  content: string, contentType: string, contentTitle: string,  documents: Document[]): Observable<Content>{
+  addContent(chapterId: string, courseId: string,  content: string, contentType: string, contentTitle: string,  documents: Document[]): Observable<Content> {
     const contentData = new FormData();
     contentData.append("contentTitle", contentTitle);
     contentData.append("content", content);

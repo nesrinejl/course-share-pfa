@@ -7,8 +7,12 @@ const checkAuth = require('../middleware/checkAuth');
 const router = express.Router();
 
 /**
- * send email invitation
+ * add student to course
  */
-router.post('/:courseId/send-email', checkAuth, EnrollmentController.addStudentToCourse);
+router.post('/', checkAuth, EnrollmentController.addStudentToCourse);
+/**
+ * get students by courseId
+ */
 
+router.get('', checkAuth, EnrollmentController.getStudentsByCourseId);
 module.exports = router;

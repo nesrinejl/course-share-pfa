@@ -18,6 +18,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthorizationGuard } from './guards/authorization.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { CourseService } from './services/course.service'
+import { EnrollmentService } from './services/enrollment.service';
 
 
 
@@ -38,6 +39,7 @@ import { CourseService } from './services/course.service'
 
   ],
   providers: [
+    EnrollmentService,
     CourseService,
     AuthGuard,
     AuthorizationGuard,

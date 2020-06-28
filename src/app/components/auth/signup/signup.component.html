@@ -21,14 +21,6 @@
                         <mat-error *ngIf="signUpForm.get('lastName').hasError('blank')">Le prénom doit avoir au moins un caractère.</mat-error>
                     </mat-form-field>
 
-                    <!-- <mat-form-field>
-            <mat-label>Vous êtes ?</mat-label>
-            <mat-select name="role" formControlName="role">
-              <mat-option value="Teacher">Enseignant</mat-option>
-              <mat-option value="Student">Étudiant</mat-option>
-            </mat-select>
-          </mat-form-field> -->
-
                     <mat-form-field>
                         <input matInput type='email' name="email" placeholder='E-mail' formControlName="email" required email>
                         <mat-error *ngIf="signUpForm.get('email').hasError('customEmail')">L'adresse mail est invalide.</mat-error>

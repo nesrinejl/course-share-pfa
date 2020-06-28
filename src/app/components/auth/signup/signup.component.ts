@@ -26,16 +26,14 @@ export class SignupComponent implements OnInit, OnDestroy {
   ) {}
 
   signUpForm: FormGroup = this.formBuilder.group({
+
     firstName: [ '', Validators.required, blankValidator() ],
     lastName: [ '', Validators.required, blankValidator() ],
     email: [ '', Validators.required, customEmailValidator() ],
-    //role: [ '', Validators.required, blankValidator() ],
     password: [ '', Validators.required, passwordStrengthValidator() ],
     passwordConfirmation: [ '', Validators.required ]
-  });
 
-  // hide = true;
-  // hideConfirmPass =true;
+  });
 
   selected = "Enseignant";
 
@@ -49,7 +47,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
       (paramMap: ParamMap) => {
           this.token = paramMap.get('token');
-          // localStorage.setItem('token', this.token);
           this.courseId = paramMap.get('courseId');
           this.authService.setToken(this.token);
           console.log(this.courseId);
@@ -58,16 +55,19 @@ export class SignupComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSignup(){
+  onSignup() {
+
     if (this.signUpForm.get('password').value !== this.signUpForm.get('passwordConfirmation').value) {
       this.signUpForm.get('passwordConfirmation').setErrors({ notIdentical: true });
       return;
     }
-    if (this.signUpForm.invalid){
+
+    if (this.signUpForm.invalid) {
       return;
     }
+
     console.log(this.token);
-    if (this.courseId && this.token){
+    if (this.courseId && this.token) {
 
       this.authService
         .createUser(
@@ -78,7 +78,9 @@ export class SignupComponent implements OnInit, OnDestroy {
           UserRolesEnum.STUDENT,
           this.courseId
         );
-    }else {
+
+    } else {
+
       this.authService
       .createUser(
         this.signUpForm.value.email,
@@ -87,12 +89,12 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.signUpForm.value.lastName,
         UserRolesEnum.TEACHER
       );
+
     }
    // this.isLoading = true;
-
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.authStatusSub
       .unsubscribe();
   }

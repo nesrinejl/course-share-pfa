@@ -42,8 +42,6 @@ export class ChapterComponent implements OnInit {
       (paramMap: ParamMap) => {
           this.loadChapter(paramMap.get('chapterId'), paramMap.get('courseId'));
           this.loadCourse(paramMap.get('courseId'));
-
-
       }
   );
   }

@@ -27,7 +27,6 @@ export class AuthService{
     private router: Router
   ){
     this.autoAuthUser();
-    console.log(this.getIsAuth());
   }
 
   getToken(){
@@ -111,7 +110,6 @@ export class AuthService{
 
   autoAuthUser(){
     const authInformation = this.getAuthData();
-    console.log(authInformation);
     if (!authInformation){
       return;
     }
@@ -139,7 +137,6 @@ export class AuthService{
   }
 
   private setAuthTimer(duration: number){
-    console.log('Setting timer' + duration);
     this.tokenTimer = setTimeout(() => {
       this.logout();
     }, duration * 1000 );

@@ -15,6 +15,7 @@ import { NewChapterComponent } from './new-chapter/new-chapter.component';
 import { NewContentComponent } from './new-content/new-content.component';
 import { ChapterComponent } from './chapter/chapter.component';
 import { ContentDetailCardComponent } from './content-detail-card/content-detail-card.component';
+import { AddStudentDialogComponent } from './add-student-dialog/add-student-dialog.component';
 
 @NgModule({
   imports: [
@@ -35,12 +36,14 @@ import { ContentDetailCardComponent } from './content-detail-card/content-detail
     NewChapterComponent,
     NewContentComponent,
     ChapterComponent,
-    ContentDetailCardComponent
+    ContentDetailCardComponent,
+    AddStudentDialogComponent
 
   ],
   entryComponents: [
     NewCourseComponent,
-    NewChapterComponent
+    NewChapterComponent,
+    AddStudentDialogComponent
   ]
 })
 export class CoursesModule { }

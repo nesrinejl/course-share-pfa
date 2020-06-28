@@ -1,0 +1,23 @@
+<div class="dialog-header-container">
+
+    <h2 class="dialog-title">Ajouter un étudiant</h2>
+
+</div>
+
+<div class="dialog-content-container">
+
+    <form [formGroup]="addStudentForm">
+        <mat-form-field>
+
+            <input matInput type="text" id="studentEmail" placeholder="Saisissez l'adresse email de l'étudiant" formControlName="studentEmail" required>
+            <mat-error *ngIf="addStudentForm.get('studentEmail').hasError('required')">Ce champ est obligatoire.</mat-error>
+            <mat-error *ngIf="addStudentForm.get('studentEmail').hasError('customEmail')">L'adresse mail est invalide.</mat-error>
+
+        </mat-form-field>
+
+    </form>
+
+    <div mat-dialog-actions>
+        <button mat-button (click)="onAddStudent()">Ajouter</button>
+    </div>
+</div>

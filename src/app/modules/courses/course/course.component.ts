@@ -4,11 +4,12 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { AuthService } from '../../../services/auth.service';
 import { CourseService } from '../../../services/course.service';
+import { EnrollmentService } from '../../../services/enrollment.service';
 
 import { Course } from '../../../models/course.model';
 import { UserData } from '../../../models/user.model';
 import { NewChapterComponent } from '../new-chapter/new-chapter.component';
-import { Chapter } from 'src/app/models/chapter.model';
+import { AddStudentDialogComponent } from '../add-student-dialog/add-student-dialog.component';
 
 @Component({
   selector: 'app-course',
@@ -19,31 +20,32 @@ export class CourseComponent implements OnInit {
 
   isLoading = true;
   panelOpenState = false;
-
   isCreator = false;
 
+  students : UserData[] = [];
   currentUser: UserData;
   course: Course = new Course();
 
   userName: string;
-  typesOfShoes: string[] = ['Sirine Mabrouk', 'Sirine Mabrouk', 'Sirine Mabrouk'];
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private  courseService: CourseService,
     private authService: AuthService,
-    private dialog: MatDialog,
-
-
+    private enrollmentService: EnrollmentService,
+    private dialog: MatDialog
   ) { }
+
   ngOnInit(): void {
 
     this.activatedRoute.paramMap.subscribe(
       (paramMap: ParamMap) => {
           this.loadCourse(paramMap.get('courseId'));
       }
-  );
+
+    );
+
 
   }
 
@@ -63,10 +65,9 @@ export class CourseComponent implements OnInit {
 
           this.userName = currentUser.lastName + ' ' + currentUser.firstName;
 
-        }else{
-          // this.userName = this.currentUser.firstName + ' ' + this.currentUser.lastName;
-          // console.log(this.userName);
         }
+        this.loadStudents();
+
         this.isLoading = false;
       },
       (error: any) => {
@@ -74,9 +75,10 @@ export class CourseComponent implements OnInit {
         this.isLoading = false;
       }
     );
+
   }
 
-  openNewChapterDialog(){
+  openNewChapterDialog() {
     this.dialog.open(
       NewChapterComponent,
       {
@@ -100,5 +102,40 @@ export class CourseComponent implements OnInit {
     this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId);
   }
 
-}
+  loadStudents() {
 
+    this.isLoading = true;
+    console.log(this.course._id)
+    this.enrollmentService
+      .getStudentsByCourseId(this.course._id)
+      .subscribe(
+        (result: any) => {
+          this.students = result.students;
+          this.isLoading = false;
+        },
+        (error: any) => {
+          this.isLoading = false;
+        }
+      );
+
+  }
+
+  onOpenAddStudentDialog() {
+    this.dialog.open(
+      AddStudentDialogComponent,
+      {
+        data: {
+          courseId : this.course._id,
+        },
+        width: '500px'
+      }
+
+    )
+    .afterClosed()
+    .subscribe(
+      result =>{
+        this.loadStudents();
+      }
+    );
+  }
+}

@@ -6,19 +6,18 @@ const User = require('../models/user.model');
 const Course = require('../models/course.model');
 
 const Enrollment = require('../models/enrollment.model');
+const { listenerCount } = require('process');
 
 exports.addStudentToCourse = async(req, res, next) => {
 
-    let fetchedStudent;
-    const courseId = req.params.courseId;
+    const email = req.body.email;
+    const courseId = req.body.courseId;
+
     try {
         const course = await Course.findOne({
             _id: courseId
         });
         console.log(course.creator);
-        let {
-            email
-        } = req.body;
 
         if (!email) {
             return res.status(400).send({
@@ -89,14 +88,14 @@ exports.addStudentToCourse = async(req, res, next) => {
             const fetchedEnrollment = Enrollment.find({ studentId: student._id, courseId: req.params.courseId });
 
             if ((await fetchedEnrollment).length >= 1) {
-                return res.status(500).json({
+                return res.status(409).json({
                     message: 'This student already exist in this course!',
                 })
             } else {
                 const enrollment = new Enrollment({
                     _id: new mongoose.Types.ObjectId(),
                     studentId: student._id,
-                    courseId: req.params.courseId,
+                    courseId: req.body.courseId,
                 });
 
                 enrollment
@@ -128,5 +127,21 @@ exports.addStudentToCourse = async(req, res, next) => {
                 "message": "Something went wrong"
             }
         });
+    }
+}
+
+exports.getStudentsByCourseId = async(req, res, next) => {
+
+    const courseId = req.query.courseId;
+    try {
+        const enrollment = await Enrollment.find({ courseId: courseId });
+
+        var studentIds = enrollment.map((enrollment) => enrollment.studentId);
+
+        return res.status(200).json({
+            students: await User.find({ '_id': { $in: studentIds } })
+        });
+    } catch (err) {
+        next(err);
     }
 }

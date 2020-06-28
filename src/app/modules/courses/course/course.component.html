@@ -144,21 +144,21 @@
                 </mat-card>
                 <mat-card class="flux-posts-card">
                     <div class="add-student-button">
-                        <img src="assets/imgs/add.png">
+                        <img src="assets/imgs/add.png" (click)="onOpenAddStudentDialog()">
                     </div>
                     <mat-card-title class="person-card-title">
                         <h2>Étudiants</h2>
                     </mat-card-title>
                     <mat-card-content>
 
-                        <mat-selection-list #shoes>
-                            <mat-list-option *ngFor="let shoe of typesOfShoes">
+                        <mat-selection-list>
+                            <mat-list-option *ngFor="let student of students">
                                 <div class="user-info-container">
                                     <div class="user-image-container">
                                         <img class="avatar" src="assets/imgs/user-a.png">
                                     </div>
                                     <div class="user-details-container">
-                                        <span class="user-name">{{shoe}}</span>
+                                        <span class="user-name">{{ student.lastName + " "+ student.firstName }}</span>
                                     </div>
                                 </div>
 
