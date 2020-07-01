@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatListModule,
     MatSnackBarModule,
     MatSidenavModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTooltipModule
 
   ],
   providers: [

@@ -20,7 +20,7 @@
         </mat-sidenav>
         <mat-sidenav-content class="mat-sidenav-content">
             <div class="card-container">
-                <mat-card class="chapters-card  clickable-card" (click)="navigateToAddContent(course._id, chapter._id)" routerLinkActive="router-link-active">
+                <mat-card class="chapters-card  clickable-card" *ngIf="role === 'Teacher'" (click)="navigateToAddContent(course._id, chapter._id)" routerLinkActive="router-link-active">
 
                     <mat-card-header>
                         <mat-card-title>
@@ -38,6 +38,28 @@
                                 <h3> Ajouter du contenu à votre chapitre... </h3>
                             </div>
                         </div>
+
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="chapters-card" *ngIf="role === 'Student'">
+
+                    <mat-card-header>
+                        <mat-card-title>
+                            <p class="chapter-name">{{ chapter.chapterName }}</p>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <hr>
+                    <mat-card-content>
+
+                        <div class="sad-container">
+                            <div class="sad-image-container">
+                                <img class="sad-emoji" src="assets/imgs/news.png">
+                            </div>
+                            <div class="sad-details-container">
+                                <h3> Ce chapitre ne contient aucun contenu... </h3>
+                            </div>
+                        </div>
+
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -45,7 +67,7 @@
                 <mat-card class="chapters-content-card" *ngFor="let content of chapter.content">
                     <mat-card-header>
                         <mat-card-title>
-                          <p class="card-title">{{ currentUser.lastName + " " + currentUser.firstName }}</p>
+                            <p class="card-title">{{ creatorName }}</p>
                         </mat-card-title>
                         <mat-card-subtitle>{{ content.createdAt | date:'medium'}}</mat-card-subtitle>
                         <div mat-card-avatar class="header-user-image">
@@ -54,72 +76,64 @@
                     </mat-card-header>
                     <hr>
                     <mat-card-content>
-                          <mat-card-title>
+                        <mat-card-title>
                             <p class="card-title">{{ content.contentTitle }}</p>
-                          </mat-card-title>
-                            <p>{{ content.content }}</p>
-                            <mat-accordion class="content-headers-align" multi="true" *ngIf="content.documents.length > 0 ">
-                              <mat-expansion-panel  *ngFor="let document of content.documents">
+                        </mat-card-title>
+                        <p>{{ content.content }}</p>
+                        <mat-accordion class="content-headers-align" multi="true" *ngIf="content.documents.length > 0 ">
+                            <mat-expansion-panel *ngFor="let document of content.documents">
                                 <mat-expansion-panel-header>
-                                  <mat-panel-title>
-                                    {{ document.documentType }}
-                                  </mat-panel-title>
-                                  <mat-panel-description *ngIf="document.documentType === 'IMAGE'">
-                                    <mat-panel-description>
-                                      Voir l'image
-                                        <img class="document-type-icon" src="assets/imgs/photo.png">
-                                    </mat-panel-description>
+                                    <mat-panel-title>
+                                        {{ document.documentType }}
+                                    </mat-panel-title>
+                                    <mat-panel-description *ngIf="document.documentType === 'IMAGE'">
+                                        <mat-panel-description>
+                                            Voir l'image
+                                            <img class="document-type-icon" src="assets/imgs/photo.png">
+                                        </mat-panel-description>
 
-                                  </mat-panel-description>
-                                  <mat-panel-description *ngIf="document.documentType === 'SOUND'">
-                                    <mat-panel-description>
-                                      Voir le podcast
-                                        <img class="document-type-icon" src="assets/imgs/speaker.png">
                                     </mat-panel-description>
+                                    <mat-panel-description *ngIf="document.documentType === 'SOUND'">
+                                        <mat-panel-description>
+                                            Voir le podcast
+                                            <img class="document-type-icon" src="assets/imgs/speaker.png">
+                                        </mat-panel-description>
 
-                                  </mat-panel-description>
-                                  <mat-panel-description *ngIf="document.documentType === 'VIDEO'">
-                                    <mat-panel-description>
-                                      Voir la vidéo
-                                        <img class="document-type-icon" src="assets/imgs/music-and-multimedia.png">
                                     </mat-panel-description>
+                                    <mat-panel-description *ngIf="document.documentType === 'VIDEO'">
+                                        <mat-panel-description>
+                                            Voir la vidéo
+                                            <img class="document-type-icon" src="assets/imgs/music-and-multimedia.png">
+                                        </mat-panel-description>
 
-                                  </mat-panel-description>
-                                  <mat-panel-description *ngIf="document.documentType === 'FILE'">
-                                    <mat-panel-description>
-                                      Voir le fichier
-                                        <img class="document-type-icon" src="assets/imgs/files-and-folders.png">
                                     </mat-panel-description>
-                                  </mat-panel-description>
+                                    <mat-panel-description *ngIf="document.documentType === 'FILE'">
+                                        <mat-panel-description>
+                                            Voir le fichier
+                                            <img class="document-type-icon" src="assets/imgs/files-and-folders.png">
+                                        </mat-panel-description>
+                                    </mat-panel-description>
                                 </mat-expansion-panel-header>
 
                                 <div class="document-file" *ngIf="document.documentType === 'IMAGE'">
-                                  <img  [src]="document.file" [alt]="content.contentTitle">
+                                    <img [src]="document.file" [alt]="content.contentTitle">
                                 </div>
 
-                                  <a [href]="document.file" *ngIf="document.documentType === 'FILE'">Consulter le fichier</a>
-                                  <pdf-viewer [src]="document.file"
-                                      [render-text]="true"
-                                      [show-all]="false"
-                                      [original-size]="true"
-                                      [autoresize]="true"
-                                      *ngIf="document.documentType === 'FILE'"
-                                  ></pdf-viewer>
+                                <a [href]="document.file" *ngIf="document.documentType === 'FILE'">Consulter le fichier</a>
+                                <pdf-viewer [src]="document.file" [render-text]="true" [show-all]="false" [original-size]="true" [autoresize]="true" *ngIf="document.documentType === 'FILE'"></pdf-viewer>
 
                                 <div class="video-container" *ngIf="document.documentType === 'VIDEO'">
-                                  <video [src]="document.file"  controls></video>
+                                    <video [src]="document.file" controls></video>
                                 </div>
-                                <div  *ngIf="document.documentType === 'SOUND'">
-                                      <audio
-                                          controls
-                                          [src]="document.file">
+                                <div *ngIf="document.documentType === 'SOUND'">
+                                    <audio controls [src]="document.file">
                                               Your browser does not support the
                                               <code>audio</code> element.
                                       </audio>
                                 </div>
-                              </mat-expansion-panel>
-                            </mat-accordion>
-                            <p class = "info-text mat-body-1" *ngIf="content.documents.length <= 0 ">Aucun document!</p>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                        <p class="info-text mat-body-1" *ngIf="content.documents.length <= 0 ">Aucun document!</p>
                     </mat-card-content>
                 </mat-card>
             </div>

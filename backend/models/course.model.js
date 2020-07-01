@@ -14,15 +14,15 @@ const documentSchema = mongoose.Schema({
         type: String,
         //required: true
     }
-});
+}, { timestamps: true });
 
 /**
  * Content Schema
  **/
 const contentSchema = mongoose.Schema({
     contentTitle: {
-      type: String,
-      //required: true
+        type: String,
+        //required: true
     },
     contentType: {
         type: String,
@@ -46,7 +46,7 @@ const chapterSchema = mongoose.Schema({
     },
     content: [contentSchema]
 
-});
+}, { timestamps: true });
 
 /**
  * course Schema
@@ -64,7 +64,7 @@ const courseSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Chapter", chapterSchema);
 module.exports = mongoose.model("Content", contentSchema);

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 
 import { UserData } from '../../../models/user.model';
-import { NewCourseComponent } from 'src/app/modules/courses/new-course/new-course.component';
-import { MatDialog } from '@angular/material/dialog';
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   userRole: string;
   constructor(
     private authService: AuthService,
-    private dialog: MatDialog,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -30,14 +30,15 @@ export class HeaderComponent implements OnInit {
     this.authService.logout();
   }
 
-  openNewCourseDialog() {
-    this.dialog.open(
-      NewCourseComponent,
-        {
-          width: '500px'
-        }
-    );
-  }
 
+
+  navigateToCourses() {
+    if (this.user.role === 'Teacher') {
+      this.router.navigateByUrl('/teacher/courses');
+    }
+    else {
+      this.router.navigateByUrl('/student/courses');
+    }
+}
 
 }

@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 
 const Course = require('../models/course.model');
 const Chapter = require('../models/course.model');
-
-
+const Enrollment = require('../models/enrollment.model');
+const User = require('../models/user.model');
 /**
  * create course
  */
@@ -36,12 +36,17 @@ exports.createCourse = (req, res, next) => {
 }
 
 /**
- * get courses by userId
+ * get courses by creatorId
  */
-exports.getCoursesByUserId = (req, res) => {
-        const userId = req.query.userId;
+exports.getCoursesByCreatorId = (req, res, next) => {
+
+        if (req.query.creatorId == undefined) {
+            return next();
+        }
+        const creatorId = req.query.creatorId;
+
         Course
-            .find({ creator: userId })
+            .find({ creator: creatorId })
             .then(
                 courses => {
                     if (!courses) {
@@ -50,7 +55,8 @@ exports.getCoursesByUserId = (req, res) => {
                         })
                     }
                     res.status(200).json(
-                        courses
+                        courses,
+
                     );
                 })
             .catch(
@@ -254,4 +260,42 @@ exports.getChaptersByCourseId = (req, res) => {
                 });
             }
         );
+}
+
+exports.getCoursesByStudentId = async(req, res, next) => {
+
+    const studentId = req.query.studentId;
+    if (studentId == undefined) {
+        return next();
+    }
+    console.log(studentId);
+    try {
+        const enrollment = await Enrollment.find({ studentId: studentId });
+
+        var courseIds = enrollment.map((enrollment) => enrollment.courseId);
+
+        console.log(courseIds);
+
+        return res.status(200).json({
+            courses: await Course.find({ '_id': { $in: courseIds } })
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.getCreatorByCourseId = async(req, res, next) => {
+
+    if (req.query.courseId == undefined) {
+        return next();
+    }
+    console.log(req.query.courseId);
+    try {
+        const course = await Course.findById(req.query.courseId);
+        return res.status(200).json({
+            creator: await User.findById(course.creator)
+        });
+    } catch (err) {
+        next(err);
+    }
 }

@@ -1,67 +1,103 @@
-<div class="app-layout-wrapper">
-    <mat-tab-group>
-        <mat-tab>
-            <ng-template mat-tab-label>
-                Mes cours
-            </ng-template>
-            <div class="tab-content-container">
-                <div class="progress-spinner-container" *ngIf="isLoading">
-                    <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
-                </div>
-                <div *ngIf="!isLoading">
-                    <div class="tab-content-container" *ngIf="!courses || courses.length <= 0">
-                        <mat-card class="create-chapters-card">
-                            <mat-card-content>
-                                <div class="sad-container">
-                                    <div class="sad-image-container">
-                                        <img class="sad-emoji" src="assets/imgs/sad.png">
-                                    </div>
-                                    <div class="sad-details-container">
-                                        <p>Vous n'avez aucun cours </p>
-                                        <h3>Attribuez des chapitres à votre classe ici</h3>
-                                    </div>
-                                </div>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                </div>
-                <div class="cards-container" *ngIf="courses && courses.length > 0">
-                    <div class="card-container">
-                        <mat-card matRipple class="create-new-course-button-card clickable-card" (click)="onCreateNewCourse()">
-                            <div class="button-card-content">
-                                <img class="icon" src="assets/imgs/plus.png">
-                                <p>Créer un nouveau cours</p>
-                            </div>
-                        </mat-card>
-                    </div>
-                    <div class="card-container" *ngFor="let course of courses; let i = index;">
-                        <mat-card matRipple class="displayed-course-card clickable-card" (click)="navigateToCourseDetails(course._id)">
-
-                            <h3 class="course-name">{{ course.courseName }}</h3>
-                            <p class="course-description">{{ course.courseDescription }}</p>
-                            <p class="student-number">0 étudiant</p>
-                            <div class="course-menu-button-container" (click)="$event.stopPropagation()" [matMenuTriggerFor]="courseMenu" [matMenuTriggerData]="{ formIndex: i }">
-
-                                <mat-icon class="bleu-icon">more_vert</mat-icon>
-                            </div>
-                            <mat-menu #courseMenu="matMenu">
-                                <!-- <button mat-menu-item>
-                        <mat-icon>visibility</mat-icon>
-                        <span>Afficher le cours</span>
-                    </button> -->
-                                <button mat-menu-item>
-                                    <mat-icon>create</mat-icon>
-                                    <span>Modifier le cours</span>
-                                </button>
-                                <button mat-menu-item>
-                                    <mat-icon>delete</mat-icon>
-                                    <span>Supprimer le cours</span>
-                                </button>
-                            </mat-menu>
-                        </mat-card>
-                    </div>
-                </div>
-            </div>
-        </mat-tab>
-    </mat-tab-group>
+<div class="app-layout-header">
+    <div class="app-layout-wrapper">
+        <h1>Mes cours</h1>
+    </div>
 </div>
+<div class="app-layout-wrapper">
+    <div class="progress-spinner-container" *ngIf="isLoading">
+        <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
+    </div>
+    <div *ngIf="!isLoading && currentUser.role === 'Teacher'">
+
+        <div class="tab-content-container" *ngIf="!courses || courses.length <= 0">
+            <mat-card class="create-chapters-card">
+                <mat-card-content>
+                    <div class="sad-container">
+                        <div class="sad-image-container">
+                            <img class="sad-emoji" src="assets/imgs/sad.png">
+                        </div>
+                        <div class="sad-details-container">
+                            <p>Vous n'avez aucun cours </p>
+                            <h3>Attribuez des chapitres à votre classe ici</h3>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div class="cards-container" *ngIf="courses && courses.length > 0">
+            <div class="card-container">
+                <mat-card matRipple class="create-new-course-button-card clickable-card" (click)="openNewCourseDialog()">
+                    <div class="button-card-content">
+                        <mat-icon class="icon">add</mat-icon>
+                        <p>Créer un nouveau cours</p>
+                    </div>
+                </mat-card>
+            </div>
+            <div class="card-container" *ngFor="let course of courses; let i = index;">
+                <mat-card matRipple class="displayed-course-card clickable-card" (click)="navigateToCourseDetails(course._id)">
+
+                    <h3 class="course-name">{{ course.courseName }}</h3>
+                    <p class="course-description">{{ course.courseDescription }}</p>
+                    <p class="student-number">0 étudiant</p>
+                    <div class="course-menu-button-container" (click)="$event.stopPropagation()" [matMenuTriggerFor]="courseMenu" [matMenuTriggerData]="{ formIndex: i }">
+
+                        <mat-icon class="icon">more_vert</mat-icon>
+                    </div>
+                    <mat-menu #courseMenu="matMenu">
+
+                        <button mat-menu-item>
+                      <mat-icon>create</mat-icon>
+                        <span>Modifier le cours</span>
+                  </button>
+                        <button mat-menu-item>
+                      <mat-icon>delete</mat-icon>
+                      <span>Supprimer le cours</span>
+                  </button>
+                    </mat-menu>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!isLoading && currentUser.role === 'Student'">
+        <div class="tab-content-container" *ngIf="!courses || courses.length <= 0">
+            <mat-card class="create-chapters-card">
+                <mat-card-content>
+                    <div class="sad-container">
+                        <div class="sad-image-container">
+                            <img class="sad-emoji" src="assets/imgs/sad.png">
+                        </div>
+                        <div class="sad-details-container">
+                            <p>Vous n'avez aucun cours </p>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="cards-container" *ngIf="courses && courses.length > 0">
+            <div class="card-container" *ngFor="let course of courses; let i = index;">
+                <mat-card matRipple class="displayed-course-card clickable-card" mat-tooltip="Afficher le cours" (click)="navigateToCourseDetails(course._id)">
+
+                    <h3 class="course-name">{{ course.courseName }}</h3>
+                    <p class="course-description">{{ course.courseDescription }}</p>
+                    <p class="student-number">0 étudiant</p>
+                    <!-- <div class="course-menu-button-container" (click)="$event.stopPropagation()" [matMenuTriggerFor]="courseMenu" [matMenuTriggerData]="{ formIndex: i }">
+
+                  <mat-icon class="icon">more_vert</mat-icon>
+              </div>
+              <mat-menu #courseMenu="matMenu">
+
+                  <button mat-menu-item>
+                <mat-icon>create</mat-icon>
+                  <span>Modifier le cours</span>
+            </button>
+                  <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Supprimer le cours</span>
+            </button>
+              </mat-menu> -->
+                </mat-card>
+            </div>
+        </div>
+
+    </div>

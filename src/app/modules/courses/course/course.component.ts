@@ -25,8 +25,11 @@ export class CourseComponent implements OnInit {
   students : UserData[] = [];
   currentUser: UserData;
   course: Course = new Course();
+  creator: UserData;
 
   userName: string;
+  role: string;
+  creatorName: string;
 
   constructor(
     private router: Router,
@@ -42,32 +45,36 @@ export class CourseComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(
       (paramMap: ParamMap) => {
           this.loadCourse(paramMap.get('courseId'));
+          this.loadCourseCreator(paramMap.get('courseId'));
       }
-
     );
-
-
   }
 
   loadCourse(courseId: string) {
     this.isLoading = true;
     const currentUser : UserData = this.authService.getUser();
+    this.role = currentUser.role;
 
     this.courseService.getCourseById(courseId).subscribe(
 
       (course: Course) => {
         this.course = course;
+        // this.loadCourseCreator();
+
         if (currentUser) {
           this.isCreator = currentUser._id === this.course.creator;
-
+          console.log(this.isCreator);
         }
+
+        if  (this.isCreator) {
+          //this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
+        }
+
         if (!this.isCreator) {
-
           this.userName = currentUser.lastName + ' ' + currentUser.firstName;
-
         }
-        this.loadStudents();
 
+        this.loadStudents();
         this.isLoading = false;
       },
       (error: any) => {
@@ -76,6 +83,22 @@ export class CourseComponent implements OnInit {
       }
     );
 
+  }
+
+  loadCourseCreator(courseId: string) {
+
+    this.courseService
+      .getCreatorByCourseId(courseId)
+      .subscribe(
+        (result: any) => {
+
+          this.creator = result.creator;
+          this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
+        },
+        (error: any) => {
+
+        }
+      );
   }
 
   openNewChapterDialog() {
@@ -92,20 +115,24 @@ export class CourseComponent implements OnInit {
     .afterClosed()
     .subscribe(
       result =>{
-        console.log(result);
         this.loadCourse(this.course._id);
       }
     );
   }
 
   navigateToChapterDetails(courseId: string, chapterId: string) {
-    this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId);
+
+    if (this.role === 'Teacher') {
+      this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId)
+    } else {
+      this.router.navigateByUrl('/student/courses/' + courseId + '/chapters/'+ chapterId)
+    }
+
   }
 
   loadStudents() {
 
     this.isLoading = true;
-    console.log(this.course._id)
     this.enrollmentService
       .getStudentsByCourseId(this.course._id)
       .subscribe(

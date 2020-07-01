@@ -23,7 +23,7 @@ export class EnrollmentService {
   }
 
   getStudentsByCourseId(courseId: string): Observable<UserData[]> {
-    console.log(courseId);
+
     const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
 
     options.params = new HttpParams();

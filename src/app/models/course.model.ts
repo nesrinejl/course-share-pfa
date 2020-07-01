@@ -6,5 +6,7 @@ export class Course {
   courseDescription?: string;
   chapters?: Chapter[] = [];
   creator?: string;
+  createdAt?: string;
+  updatedAt?: string;
 
 }

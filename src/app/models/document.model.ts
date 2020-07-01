@@ -4,4 +4,6 @@ export class Document{
 
   documentType: DocumentTypeEnum;
   file: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

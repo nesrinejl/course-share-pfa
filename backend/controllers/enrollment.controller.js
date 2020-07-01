@@ -4,9 +4,7 @@ const mongoose = require("mongoose");
 
 const User = require('../models/user.model');
 const Course = require('../models/course.model');
-
 const Enrollment = require('../models/enrollment.model');
-const { listenerCount } = require('process');
 
 exports.addStudentToCourse = async(req, res, next) => {
 

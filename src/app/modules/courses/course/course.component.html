@@ -1,4 +1,11 @@
 <div class="app-layout-wrapper">
+
+    <div class="add-chapter" *ngIf="!isLoading && course.chapters && course.chapters.length > 0 && role === 'Teacher'">
+        <button mat-fab class="add-chapter-btn" matTooltip="Ajouter un chapitre" (click)="openNewChapterDialog()">
+          <mat-icon>add</mat-icon>
+        </button>
+    </div>
+
     <mat-tab-group mat-stretch-tabs>
         <mat-tab label="Flux">
             <div class="progress-spinner-container" *ngIf="isLoading">
@@ -18,19 +25,21 @@
                 <div class="card-container">
                     <mat-card class="chapters-card" *ngFor="let chapter of course.chapters">
                         <mat-card-header>
+                            <!-- <p class="chapter-name">{{ creator.lastName + ' ' + creator.firstName }} a publié un nouveau chapitre : {{ chapter.chapterName }}</p> -->
 
+                            <div mat-card-avatar class="header-image">
+                                <img class="documentation-icon" src="assets/imgs/book.png">
+                            </div>
                             <mat-card-subtitle>
-                                <div mat-card-avatar class="header-image">
-                                    <img class="documentation-icon" src="assets/imgs/book.png">
-                                </div>
+                                {{ chapter.createdAt | date:'mediumDate'}}
                             </mat-card-subtitle>
                         </mat-card-header>
                         <mat-card-content>
-                            <p class="chapter-name">{{ userName }} a publié un nouveau chapitre : {{ chapter.chapterName }}</p>
+                            <p class="chapter-name">{{ creatorName }} a publié un nouveau chapitre : {{ chapter.chapterName }}</p>
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <mat-card class="flux-posts-card">
+                <mat-card class="flux-posts-card" *ngIf="role === 'Teacher'">
                     <mat-card-content>
                         <div class="sad-image-container">
                             <img class="sad-emoji" src="assets/imgs/chat.png">
@@ -48,14 +57,8 @@
                 <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
             </div>
 
-            <div class="add-chapter" *ngIf="!isLoading && course.chapters && course.chapters.length > 0">
-                <button mat-raised-button class="add-chapter-btn" (click)="openNewChapterDialog()">
-                  Ajouter un chapitre
-                </button>
-            </div>
-
             <div *ngIf="!isLoading">
-                <div class="tab-content-container" *ngIf="!course.chapters || course.chapters.length <= 0">
+                <div class="tab-content-container" *ngIf="role === 'Teacher' && (!course.chapters || course.chapters.length <= 0)">
                     <mat-card class="create-chapters-card clickable-card" (click)="openNewChapterDialog()">
                         <mat-card-content>
                             <div class="sad-container">
@@ -73,15 +76,14 @@
                 <div class="tab-content-container" *ngIf="course.chapters && course.chapters.length > 0">
                     <div class="card-container" *ngFor="let chapter of course.chapters">
                         <mat-card class="chapters-card clickable-card" (click)="navigateToChapterDetails(course._id, chapter._id)">
-
                             <mat-card-header>
                                 <mat-card-title>
                                     <p class="chapter-name">{{ chapter.chapterName }}</p>
                                 </mat-card-title>
-
+                                <mat-card-subtitle>{{ chapter.createdAt | date:'mediumDate'}}</mat-card-subtitle>
                             </mat-card-header>
                             <hr>
-                            <mat-card-content *ngIf="!chapter.content || chapter.content.length <= 0 ">
+                            <mat-card-content *ngIf="!chapter.content || chapter.content.length <= 0">
 
                                 <div class="sad-container">
                                     <div class="sad-image-container">
@@ -89,7 +91,7 @@
                                     </div>
                                     <div class="sad-details-container">
                                         <p>Ce chapitre ne contient pas de contenu! </p>
-                                        <h3> Ajouter du contenu à votre chapitre... </h3>
+                                        <h3 *ngIf="role === 'Teacher'"> Ajouter du contenu à votre chapitre... </h3>
                                     </div>
                                 </div>
 
@@ -98,10 +100,20 @@
                                 <mat-list *ngFor="let content of chapter.content,  let lastItem = last;">
 
                                     <mat-list-item>
-                                        <img class="documentation-icon" src="assets/imgs/book.png">
-                                        <p class="chapter-name">
-                                            {{ userName }} ajouté un nouveau contenu à ce chapitre {{ chapter.chapterName }}
-                                        </p>
+
+                                        <div class="content">
+                                            <div class="content-icon-container">
+                                                <img class="content-icon" src="assets/imgs/book.png">
+                                            </div>
+
+                                            <div class="content-details">
+                                                <p class="content-name">
+                                                    {{ content.contentTitle }}
+                                                </p>
+                                                <p class="date">{{ content.createdAt | date:'mediumDate'}}</p>
+                                            </div>
+
+                                        </div>
 
                                     </mat-list-item>
                                     <mat-divider *ngIf="!lastItem"></mat-divider>
@@ -124,33 +136,45 @@
             <div class="tab-content-container">
 
                 <mat-card class="flux-posts-card">
-
+                    <mat-card-title class="person-card-title">
+                        <h2>
+                            Enseignant
+                        </h2>
+                    </mat-card-title>
+                    <hr>
                     <mat-card-content>
-                        <mat-card-title class="person-card-title">
-                            <h2>
-                                Enseignant
-                            </h2>
-                            <div class="user-info-container">
-                                <div class="user-image-container">
-                                    <img class="avatar" src="assets/imgs/user-a.png">
-                                </div>
-                                <div class="user-details-container">
-                                    <span class="user-name">{{ userName }}</span>
-                                </div>
+                        <div class="user-info-container">
+                            <div class="user-image-container">
+                                <img class="avatar" src="assets/imgs/user-a.png">
                             </div>
-                            <!-- <h3>{{ userName }}</h3> -->
-                        </mat-card-title>
+                            <div class="user-details-container">
+                                <span class="user-name">{{ creatorName }}</span>
+                            </div>
+                        </div>
                     </mat-card-content>
                 </mat-card>
+
                 <mat-card class="flux-posts-card">
-                    <div class="add-student-button">
-                        <img src="assets/imgs/add.png" (click)="onOpenAddStudentDialog()">
-                    </div>
                     <mat-card-title class="person-card-title">
                         <h2>Étudiants</h2>
+                        <div class="add-student-button" *ngIf="role === 'Teacher'">
+                            <img src="assets/imgs/add.png" matTooltip="Ajouter un étudiant" (click)="onOpenAddStudentDialog()">
+                        </div>
                     </mat-card-title>
-                    <mat-card-content>
+                    <hr>
+                    <mat-card-content *ngIf="role === 'Teacher' && (!students || students.length <= 0)">
+                        <div class="sad-container">
+                            <div class="sad-image-container">
+                                <img class="sad-emoji" src="assets/imgs/sad.png">
+                            </div>
+                            <div class="sad-details-container">
+                                <p>Aucun étudiant suit ce cours! </p>
+                                <h3> Ajouter des étudiants à votre cours... </h3>
+                            </div>
+                        </div>
+                    </mat-card-content>
 
+                    <mat-card-content *ngIf="students && students.length > 0 ">
                         <mat-selection-list>
                             <mat-list-option *ngFor="let student of students">
                                 <div class="user-info-container">

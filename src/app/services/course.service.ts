@@ -13,6 +13,7 @@ import { FETCHING_JSON_REQUESTS_HTTP_OPTIONS } from '../constants/http-options.c
 import { Chapter } from '../models/chapter.model';
 import { Content } from '../models/content.model';
 import { Document } from '../models/document.model';
+import { UserData } from '../models/user.model';
 
 const backendUrl  = environment.apiUrl + '/courses';
 
@@ -31,12 +32,12 @@ export class CourseService {
 
   }
 // get course by userId (creator)
-  getCoursesByUserId(userId: string): Observable<Course[]> {
+  getCoursesByCreatorId(creatorId: string): Observable<Course[]> {
 
     const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
 
     options.params = new HttpParams();
-    options.params = options.params.set('userId', userId);
+    options.params = options.params.set('userId', creatorId);
 
     return this.http.get<Course[]>(backendUrl, options);
 
@@ -87,5 +88,25 @@ export class CourseService {
     console.log(contentData.getAll('documents').values());
 
     return this.http.post<Content>(backendUrl + '/' + courseId +'/chapters/' + chapterId  + '/add-content', contentData);
+  }
+
+  getCoursesByStudentId(studentId: string): Observable<Course[]> {
+
+    const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
+
+    options.params = new HttpParams();
+    options.params = options.params.set('studentId', studentId);
+
+    return this.http.get<Course[]>(backendUrl, options);
+
+  }
+
+  getCreatorByCourseId(courseId: string): Observable<any>{
+    const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
+
+    options.params = new HttpParams();
+    options.params = options.params.set('courseId', courseId);
+
+    return this.http.get<any>(backendUrl, options);
   }
 }

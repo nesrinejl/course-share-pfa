@@ -1,18 +1,19 @@
 .app-layout-main-container {
     position: absolute;
+    background-color: #f6f7fb;
     top: 0;
-    bottom: 0;
+    bottom: auto;
     left: 0;
     right: 0;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    background-color: #f6f7fb;
     .app-layout-content {
         height: 100%;
         .app-layout-header {
             width: 100%;
+            // background-image: linear-gradient(90deg, #006eff, #04F6FF);
             background: #03a4ff;
             color: white;
             opacity: 0.5;
@@ -26,4 +27,8 @@
             padding: 48px 0px;
         }
     }
+}
+
+hr {
+    background-color: #d8d8d8
 }

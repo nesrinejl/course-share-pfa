@@ -18,14 +18,17 @@ export class ChapterComponent implements OnInit {
 
   isLoading = true;
   panelOpenState = false;
-
   isCreator = false;
 
-  //currentUser: UserData;
   chapter: Chapter = new Chapter();
   chapters: Chapter[] = [];
   course: Course = new Course();
+  creator: UserData;
+
   courseId: string;
+  creatorName: string;
+  role: string;
+
   currentUser : UserData = this.authService.getUser();
 
   constructor(
@@ -42,6 +45,7 @@ export class ChapterComponent implements OnInit {
       (paramMap: ParamMap) => {
           this.loadChapter(paramMap.get('chapterId'), paramMap.get('courseId'));
           this.loadCourse(paramMap.get('courseId'));
+          this.loadCourseCreator(paramMap.get('courseId'));
       }
   );
   }
@@ -49,6 +53,7 @@ export class ChapterComponent implements OnInit {
   loadChapter(chapterId: string, courseId: string) {
     this.isLoading = true;
     const currentUser : UserData = this.authService.getUser();
+    this.role = currentUser.role;
 
     this.courseService.getChapterById(chapterId, courseId).subscribe(
 
@@ -66,14 +71,26 @@ export class ChapterComponent implements OnInit {
   }
 
   navigateToChapterDetails(courseId: string, chapterId: string) {
-    this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId);
+
+    if (this.role === 'Teacher') {
+      this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId);
+    } else {
+      this.router.navigateByUrl('/student/courses/' + courseId + '/chapters/'+ chapterId);
+    }
+
   }
 
   navigateToCourse(courseId: string) {
-    this.router.navigateByUrl('/teacher/courses/' + courseId );
+
+    if (this.role === 'Teacher') {
+      this.router.navigateByUrl('/teacher/courses/' + courseId );
+    } else {
+      this.router.navigateByUrl('/student/courses/' + courseId );
+    }
+
   }
 
-  navigateToAddContent(courseId: string, chapterId: string){
+  navigateToAddContent(courseId: string, chapterId: string) {
     this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId + '/add-content');
   }
 
@@ -94,6 +111,20 @@ export class ChapterComponent implements OnInit {
       }
     );
   }
+  loadCourseCreator(courseId: string) {
 
+    this.courseService
+      .getCreatorByCourseId(courseId)
+      .subscribe(
+        (result: any) => {
+
+          this.creator = result.creator;
+          this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
+        },
+        (error: any) => {
+
+        }
+      );
+  }
 
 }
