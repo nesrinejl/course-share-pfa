@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { environment } from '../../environments/environment';
 
@@ -11,43 +12,45 @@ import { UserRolesEnum } from '../enumerations/user-roles.enum';
 import { getRoutePrefixFromRole } from '../utils/navigations.util';
 
 
-const BACKEND_URL  = environment.apiUrl + '/user';
+const BackendUrl  = environment.apiUrl + '/user';
 
 @Injectable({ providedIn: "root" })
 export class AuthService{
 
   private token: string;
   private authStatusListener = new Subject<boolean>();
-  private isAuthenticated = false;
   private tokenTimer: any;
   private user: UserData;
 
+  private isAuthenticated = false;
+
   constructor(
     private http: HttpClient,
-    private router: Router
-  ){
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {
     this.autoAuthUser();
   }
 
-  getToken(){
+  getToken() {
     return this.token;
   }
 
-  getIsAuth(){
+  getIsAuth() {
     return this.isAuthenticated;
   }
 
-  getUser(){
+  getUser() {
     return this.user;
   }
-  getUserRole(){
+  getUserRole() {
     return this.user.role;
   }
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }
 
-  createUser(email: string, password: string, firstName: string, lastName: string, role: UserRolesEnum, courseId?: string){
+  createUser(email: string, password: string, firstName: string, lastName: string, role: UserRolesEnum, courseId?: string) {
     const userData: any = {
         email: email,
         password: password,
@@ -59,7 +62,7 @@ export class AuthService{
       userData.courseId = courseId;
     }
     this.http
-      .post(BACKEND_URL + '/sign-up', userData)
+      .post(BackendUrl + '/sign-up', userData)
       .subscribe(() => {
         this.router.navigate(["/auth/login"]);
         localStorage.removeItem('token');
@@ -79,14 +82,16 @@ export class AuthService{
 
   }
 
-  login(email: string, password: string){
+  login(email: string, password: string) {
+
      const loginInCredentials = {email: email, password: password};
-     this.http.post<{token: string, expiresIn: number}>(BACKEND_URL + '/login', loginInCredentials)
+     this.http.post<{token: string, expiresIn: number}>(BackendUrl + '/login', loginInCredentials)
       .subscribe(
         response => {
-          this.http.get(BACKEND_URL, { params: new HttpParams().set('email', email) })
+          this.http.get(BackendUrl, { params: new HttpParams().set('email', email) })
             .subscribe(
               (userData : UserData) => {
+
                 const expiresInDuration = response.expiresIn;
                 this.setAuthTimer(expiresInDuration);
                 this.isAuthenticated = true;
@@ -99,16 +104,27 @@ export class AuthService{
 
                 this.saveAuthData(response.token, expirationDate, userData);
                 this.routeUserAfterAuthentication();
+
               }
             )
 
       }, error => {
+
         this.authStatusListener.next(false);
+        switch (error.status) {
+          case 400:
+              this.snackBar.open('Quelque chose ne va pas!  Veuillez réessayer plus tard');
+              break;
+          case 401:
+              this.snackBar.open('Identifiants incorrects!');
+              break;
+        }
+
       }
     );
   }
 
-  autoAuthUser(){
+  autoAuthUser() {
     const authInformation = this.getAuthData();
     if (!authInformation){
       return;
@@ -124,7 +140,7 @@ export class AuthService{
     }
   }
 
-  logout(){
+  logout() {
 
     this.token = null;
     this.isAuthenticated = false;
@@ -136,27 +152,27 @@ export class AuthService{
 
   }
 
-  private setAuthTimer(duration: number){
+  private setAuthTimer(duration: number) {
     this.tokenTimer = setTimeout(() => {
       this.logout();
     }, duration * 1000 );
   }
 
-  private saveAuthData(token: string, expirationDate: Date, user: UserData){
+  private saveAuthData(token: string, expirationDate: Date, user: UserData) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiration', expirationDate.toISOString());
     localStorage.setItem('user', JSON.stringify(user));
   }
 
 
-  private clearAuthData(){
+  private clearAuthData() {
     localStorage.removeItem('token');
     localStorage.removeItem('expiration');
     localStorage.removeItem('user');
 
   }
 
-  private getAuthData(){
+  private getAuthData() {
     const token = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expiration");
     const user = JSON.parse(localStorage.getItem('user'));

@@ -31,13 +31,14 @@ export class CourseService {
     return this.http.post<any>(backendUrl + '/new-course', course);
 
   }
-// get course by userId (creator)
+
+// get course by creatorId
   getCoursesByCreatorId(creatorId: string): Observable<Course[]> {
 
     const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
 
     options.params = new HttpParams();
-    options.params = options.params.set('userId', creatorId);
+    options.params = options.params.set('creatorId', creatorId);
 
     return this.http.get<Course[]>(backendUrl, options);
 

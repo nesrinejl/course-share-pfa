@@ -58,7 +58,9 @@ exports.addStudentToCourse = async(req, res, next) => {
                     from: '"Course Share" <course.share.app@gmail.com>',
                     to: email,
                     subject: 'Invitation',
-                    html: '<p>' + url + '</p>'
+                    html: '<b>Vous êtes invité à rejoindre le course' + course.courseName + '</b> <br>' +
+                        '<p>Cliquez sur le lien ci-dessous</p></br>' +
+                        '<p>' + url + '</p>'
                 }
                 // verify connection configuration
             transporter.verify(function(error, success) {

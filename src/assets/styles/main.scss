@@ -1,3 +1,5 @@
+// base
+@import 'base/reset';
 // layouts
 @import 'layouts/app-layout';
 @import 'layouts/cards';
@@ -8,3 +10,5 @@
 @import 'layouts/tabs';
 @import 'layouts/toolbar';
 @import 'layouts/spinner';
+@import 'layouts/dialog';
+@import 'layouts/overlays';

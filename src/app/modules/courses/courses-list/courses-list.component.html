@@ -1,22 +1,23 @@
-<div class="app-layout-header">
-    <div class="app-layout-wrapper">
+<div class="progress-spinner-container" *ngIf="isLoading">
+    <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
+</div>
+<div class="app-layout-header" *ngIf="!isLoading">
+    <div class=" app-layout-wrapper ">
         <h1>Mes cours</h1>
     </div>
 </div>
-<div class="app-layout-wrapper">
-    <div class="progress-spinner-container" *ngIf="isLoading">
-        <mat-spinner [diameter]="50" [strokeWidth]="4"></mat-spinner>
-    </div>
-    <div *ngIf="!isLoading && currentUser.role === 'Teacher'">
+<div class="app-layout-wrapper " *ngIf="!isLoading ">
 
-        <div class="tab-content-container" *ngIf="!courses || courses.length <= 0">
-            <mat-card class="create-chapters-card">
+    <div *ngIf="!isLoading && currentUser.role === 'Teacher' ">
+
+        <div class="tab-content-container " *ngIf="!courses || courses.length <=0">
+            <mat-card class="create-chapters-card clickable-card" (click)="openNewCourseDialog()">
                 <mat-card-content>
-                    <div class="sad-container">
-                        <div class="sad-image-container">
-                            <img class="sad-emoji" src="assets/imgs/sad.png">
+                    <div class="sad-container ">
+                        <div class="sad-image-container ">
+                            <img class="sad-emoji " src="assets/imgs/sad.png ">
                         </div>
-                        <div class="sad-details-container">
+                        <div class="sad-details-container ">
                             <p>Vous n'avez aucun cours </p>
                             <h3>Attribuez des chapitres à votre classe ici</h3>
                         </div>
@@ -25,7 +26,7 @@
             </mat-card>
         </div>
 
-        <div class="cards-container" *ngIf="courses && courses.length > 0">
+        <div class="cards-container " *ngIf="courses && courses.length> 0">
             <div class="card-container">
                 <mat-card matRipple class="create-new-course-button-card clickable-card" (click)="openNewCourseDialog()">
                     <div class="button-card-content">

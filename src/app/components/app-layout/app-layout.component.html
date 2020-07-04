@@ -1,5 +1,7 @@
 <div class="app-layout-main-container">
     <app-header></app-header>
+    <mat-progress-bar *ngIf="displayLoader" mode="indeterminate" color="accent" class="mat-elevation-z6 app-layout-progress-bar"></mat-progress-bar>
+    <div *ngIf="displayLoader" class="loader-overlay"></div>
     <div class="app-layout-content">
         <router-outlet></router-outlet>
     </div>

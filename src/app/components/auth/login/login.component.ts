@@ -14,9 +14,7 @@ import { UserRolesEnum } from 'src/app/enumerations/user-roles.enum';
 })
 export class LoginComponent implements OnInit {
 
-  hidePassword = true;
 
-  constructor(public authService: AuthService, private router: Router, private formBuilder: FormBuilder) { }
 
   loginForm: FormGroup = this.formBuilder.group({
 
@@ -26,20 +24,35 @@ export class LoginComponent implements OnInit {
   });
 
 
+  hidePassword = true;
+  showLoader = false;
+
+  constructor(
+    public authService: AuthService,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) {}
+
   ngOnInit(): void {
 
-    if (this.authService.getIsAuth()){
+    if (this.authService.getIsAuth()) {
 
       this.authService.routeUserAfterAuthentication();
 
     }
   }
 
-  onLogin(){
+  onLogin() {
+
+    this.showLoader = true;
+
     if (this.loginForm.invalid){
+      this.showLoader = false;
       return;
     }
+
     this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
+
   }
 
 

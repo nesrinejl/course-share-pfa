@@ -1,4 +1,5 @@
 <mat-toolbar class="mat-elevation-z6">
+    <div *ngIf="displayLoader" class="toolbar-overlay"></div>
     <div class="logo-container">
         <img class="logo" src="assets/imgs/logo-app.png" (click)="navigateToCourses()">
     </div>

@@ -44,44 +44,81 @@ export class CourseComponent implements OnInit {
 
     this.activatedRoute.paramMap.subscribe(
       (paramMap: ParamMap) => {
-          this.loadCourse(paramMap.get('courseId'));
+          this.loadCourse(paramMap.get('courseId'), 0);
           this.loadCourseCreator(paramMap.get('courseId'));
       }
     );
   }
 
-  loadCourse(courseId: string) {
-    this.isLoading = true;
+  loadCourse(courseId: string, selectedTabIndex: number) {
+
     const currentUser : UserData = this.authService.getUser();
     this.role = currentUser.role;
 
-    this.courseService.getCourseById(courseId).subscribe(
 
-      (course: Course) => {
-        this.course = course;
-        // this.loadCourseCreator();
+    if (selectedTabIndex === 0 || selectedTabIndex === 1) {
+      this.isLoading = true;
 
-        if (currentUser) {
-          this.isCreator = currentUser._id === this.course.creator;
-          console.log(this.isCreator);
+      this.courseService.getCourseById(courseId).subscribe(
+
+        (course: Course) => {
+          this.course = course;
+          // this.loadCourseCreator();
+
+          if (currentUser) {
+            this.isCreator = currentUser._id === this.course.creator;
+            console.log(this.isCreator);
+          }
+
+          if  (this.isCreator) {
+            //this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
+          }
+
+          if (!this.isCreator) {
+            this.userName = currentUser.lastName + ' ' + currentUser.firstName;
+          }
+
+          //this.loadStudents();
+          this.isLoading = false;
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
         }
+      )
+    }
+    if (selectedTabIndex === 2) {
+      this.isLoading = true;
 
-        if  (this.isCreator) {
-          //this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
+      this.courseService.getCourseById(courseId).subscribe(
+
+        (course: Course) => {
+          this.course = course;
+          // this.loadCourseCreator();
+
+          if (currentUser) {
+            this.isCreator = currentUser._id === this.course.creator;
+            console.log(this.isCreator);
+          }
+
+          if  (this.isCreator) {
+            //this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
+          }
+
+          if (!this.isCreator) {
+            this.userName = currentUser.lastName + ' ' + currentUser.firstName;
+          }
+
+          this.loadStudents();
+          this.isLoading = false;
+        },
+        (error: any) => {
+          console.log(error);
+          this.isLoading = false;
         }
+      )
+    }
 
-        if (!this.isCreator) {
-          this.userName = currentUser.lastName + ' ' + currentUser.firstName;
-        }
-
-        this.loadStudents();
-        this.isLoading = false;
-      },
-      (error: any) => {
-        console.log(error);
-        this.isLoading = false;
-      }
-    );
 
   }
 
@@ -115,7 +152,7 @@ export class CourseComponent implements OnInit {
     .afterClosed()
     .subscribe(
       result =>{
-        this.loadCourse(this.course._id);
+        this.loadCourse(this.course._id, 0);
       }
     );
   }

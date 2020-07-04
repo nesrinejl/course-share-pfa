@@ -1,0 +1,33 @@
+.dialog-header-container {
+    width: 100%;
+    .dialog-title {
+        margin: 0px;
+    }
+}
+
+.dialog-content-container,
+.dialog-actions-container {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.dialog-actions-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    box-sizing: border-box;
+    .actions {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        box-sizing: border-box;
+    }
+    .left {
+        justify-content: flex-start;
+    }
+    .right {
+        justify-content: flex-end;
+    }
+}

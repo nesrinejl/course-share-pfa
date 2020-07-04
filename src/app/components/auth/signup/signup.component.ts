@@ -18,6 +18,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   private authStatusSub: Subscription;
   private token : string;
   private courseId: string;
+  showLoader = false;
 
   constructor(
     public authService: AuthService,
@@ -62,11 +63,12 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
 
+
     if (this.signUpForm.invalid) {
       return;
     }
+    this.showLoader = true;
 
-    console.log(this.token);
     if (this.courseId && this.token) {
 
       this.authService

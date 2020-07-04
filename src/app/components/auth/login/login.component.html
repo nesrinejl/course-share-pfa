@@ -1,43 +1,39 @@
 <div class="page-layout-main-container">
-  <div class="page-layout-body-container">
-    <mat-card class="page-card">
-      <mat-card-header>
-        <mat-card-title>
-          <!-- <div class="logo-container"> -->
-            <img class="logo" src="assets/imgs/logo-app.png">
-          <!-- </div> -->
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="loginForm">
-          <mat-form-field>
-            <input matInput type='email' name="email" placeholder='E-mail' formControlName="email" required email>
-            <mat-error *ngIf="loginForm.get('email').hasError('required')">Ce champ est obligatoire.</mat-error>
-            <mat-error *ngIf="loginForm.get('email').hasError('customEmail')">L'adresse mail est invalide.</mat-error>
-            <mat-error *ngIf="loginForm.get('email').hasError('accountNotFound')">The given email address does not match our records</mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput type='password' name="password" [type]="hidePassword ? 'password' : 'text'" placeholder='Password' formControlName="password" required>
-            <mat-icon matSuffix *ngIf="loginForm.get('password').value != ''" (click)="hidePassword = !hidePassword" style="cursor: pointer;">{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
-            <mat-error *ngIf="loginForm.get('password').hasError('required')">Ce champ est obligatoire.</mat-error>
-            <mat-error *ngIf="loginForm.get('password').hasError('wrongPassword')">Mot de passe incorrecte.</mat-error>
-          </mat-form-field>
-        </form>
-      </mat-card-content>
-      <mat-card-actions>
-        <p class="clickable-text">Vous n'avez pas de compte?<br><a routerLink="/sign-up">S'inscrire</a></p>
-        <button
-          class="login-btn"
-          mat-raised-button
-          (click)="onLogin()"
-          
-        >
+    <div class="page-layout-body-container">
+        <mat-card class="page-card">
+            <mat-card-header>
+                <mat-card-title>
+                    <!-- <div class="logo-container"> -->
+                    <img class="logo" src="assets/imgs/logo-app.png">
+                    <!-- </div> -->
+                </mat-card-title>
+            </mat-card-header>
+            <mat-progress-bar *ngIf="showLoader" mode="indeterminate"></mat-progress-bar>
+            <mat-card-content>
+                <form [formGroup]="loginForm">
+                    <mat-form-field>
+                        <input matInput type='email' name="email" placeholder='E-mail' formControlName="email" required email>
+                        <mat-error *ngIf="loginForm.get('email').hasError('required')">Ce champ est obligatoire.</mat-error>
+                        <mat-error *ngIf="loginForm.get('email').hasError('customEmail')">L'adresse mail est invalide.</mat-error>
+                        <mat-error *ngIf="loginForm.get('email').hasError('accountNotFound')">The given email address does not match our records</mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <input matInput type='password' name="password" [type]="hidePassword ? 'password' : 'text'" placeholder='Password' formControlName="password" required>
+                        <mat-icon matSuffix *ngIf="loginForm.get('password').value != ''" (click)="hidePassword = !hidePassword" style="cursor: pointer;">{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
+                        <mat-error *ngIf="loginForm.get('password').hasError('required')">Ce champ est obligatoire.</mat-error>
+                        <mat-error *ngIf="loginForm.get('password').hasError('wrongPassword')">Mot de passe incorrecte.</mat-error>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+            <mat-card-actions>
+                <p class="clickable-text">Vous n'avez pas de compte?<br><a routerLink="/sign-up">S'inscrire</a></p>
+                <button class="login-btn" mat-raised-button (click)="onLogin()" [disabled]="loginForm.invalid || showLoader">
           Se connecter
         </button>
-      </mat-card-actions>
+            </mat-card-actions>
 
-    </mat-card>
+        </mat-card>
 
-  </div>
+    </div>
 
 </div>

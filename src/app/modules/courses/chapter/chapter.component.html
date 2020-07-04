@@ -41,7 +41,23 @@
 
                     </mat-card-content>
                 </mat-card>
-                <mat-card class="chapters-card" *ngIf="role === 'Student'">
+                <div *ngIf="role === 'Student'">
+                    <mat-card class="flux-card">
+                        <mat-card-header>
+                            <mat-card-title>
+
+                                <p class="course-name ">{{ chapter.chapterName }}</p>
+                                <!-- <h3 class="course-description ">{{ course.courseDescription }}</h3> -->
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                        </mat-card-content>
+                    </mat-card>
+                    <!-- <mat-card-title>
+                        <p class="chapter-name">{{ chapter.chapterName }}</p>
+                    </mat-card-title> -->
+                </div>
+                <!-- <mat-card class="chapters-card" *ngIf="role === 'Student'">
 
                     <mat-card-header>
                         <mat-card-title>
@@ -61,7 +77,7 @@
                         </div>
 
                     </mat-card-content>
-                </mat-card>
+                </mat-card> -->
             </div>
             <div class="card-container" *ngIf="chapter.content && chapter.content.length > 0 ">
                 <mat-card class="chapters-content-card" *ngFor="let content of chapter.content">

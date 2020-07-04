@@ -20,6 +20,7 @@
         .displayed-course-card {
             flex: 1;
             position: relative;
+            .course-name,
             .course-description {
                 font-size: small;
                 width: 200px;
@@ -95,5 +96,5 @@
 }
 
 .icon {
-    color: #888888;
+    color: #564D4D;
 }

@@ -1,0 +1,21 @@
+html,
+body {
+    height: 100%;
+    background-color: #f6f7fb;
+}
+
+body {
+    margin: 0;
+}
+
+a {
+    //color: map-get($colors, primary-tint);
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+h1 {
+    margin-bottom: 2em !important;
+}

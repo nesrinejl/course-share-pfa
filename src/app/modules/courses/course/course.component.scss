@@ -88,7 +88,7 @@ mat-card-title {
 .create-chapters-card,
 .chapter-name,
 .content-name,
-.person-card-title {
+.card-title {
     color: #615F5F;
 }
 
@@ -98,7 +98,7 @@ mat-card-title {
     font-weight: 500;
 }
 
-.person-card-title {
+.card-title {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -165,8 +165,8 @@ mat-card-title {
 
 .content-icon-container,
 .user-image-container {
-    height: 36px;
-    width: 36px;
+    height: 24px;
+    width: 24px;
 }
 
 .user-info-container {
@@ -185,7 +185,7 @@ mat-card-title {
     background-size: cover;
 }
 
-.add-student-button {
+.right {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -197,5 +197,14 @@ mat-card-title {
         height: 24px;
         display: block;
         cursor: pointer;
+    }
+}
+
+.header-user-image {
+    // margin-left: 15px;
+    img {
+        background-size: cover;
+        height: 40px;
+        width: 40px;
     }
 }

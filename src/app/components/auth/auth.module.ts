@@ -8,11 +8,13 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from 'src/app/angular-material.module';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
     SignupComponent,
+    ConfirmationDialogComponent,
   ],
   imports:[
     CommonModule,

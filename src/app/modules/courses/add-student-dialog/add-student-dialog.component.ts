@@ -16,6 +16,7 @@ export class AddStudentDialogComponent {
   constructor(
     private formBuilder: FormBuilder,
     private enrollmentService: EnrollmentService,
+    private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<AddStudentDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) { }
@@ -35,11 +36,16 @@ export class AddStudentDialogComponent {
       this.addStudentForm.get('studentEmail').value
     ).subscribe(
       () => {
+
+        this.snackBar.open('L\'invitation a été envoyé avec succès!');
+
         this.dialogRef.close();
     },
     (error: any) => {
         console.log(error);
         //snackbar
+        this.snackBar.open('Oups! Something went wrong, please verify your input and try again later.');
+
     }
     );
   }

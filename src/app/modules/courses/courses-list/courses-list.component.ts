@@ -35,6 +35,7 @@ export class CoursesListComponent implements OnInit {
     if (!this.currentUser) {
         return;
     }
+    console.log(this.currentUser);
 
     this.isLoading = true;
     if (this.currentUser.role === 'Teacher') {
@@ -49,7 +50,8 @@ export class CoursesListComponent implements OnInit {
           this.isLoading = false;
         }
       )
-    } else {
+    }
+    if (this.currentUser.role === 'Student') {
       this.courseService.getCoursesByStudentId(this.currentUser._id).subscribe(
         (result: any) => {
           this.courses = result.courses;
@@ -64,7 +66,6 @@ export class CoursesListComponent implements OnInit {
       )
     }
 
-    console.log(this.currentUser.role);
   }
 
   openNewCourseDialog() {

@@ -50,7 +50,7 @@ export class NewCourseComponent {
       (response: any) => {
           this.snackBar.open('Le cours a été créé avec succès!');
 
-          this.router.navigate([ '/' ]);
+          this.router.navigate([ '/teacher/courses' ]);
           this.dialogRef.close(true);
       },
       (error: any) => {
