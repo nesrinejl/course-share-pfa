@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { blankValidator } from '../../../utils/validators.util';
+
 
 import { AuthService } from '../../../services/auth.service';
 import { CourseService } from '../../../services/course.service';
@@ -10,6 +15,7 @@ import { Course } from '../../../models/course.model';
 import { UserData } from '../../../models/user.model';
 import { NewChapterComponent } from '../new-chapter/new-chapter.component';
 import { AddStudentDialogComponent } from '../add-student-dialog/add-student-dialog.component';
+import { Post } from 'src/app/models/post.model';
 
 @Component({
   selector: 'app-course',
@@ -21,12 +27,14 @@ export class CourseComponent implements OnInit {
   isLoading = true;
   panelOpenState = false;
   isCreator = false;
+  isAuthor = false;
 
   students : UserData[] = [];
   currentUser: UserData;
   course: Course = new Course();
   creator: UserData;
 
+  authorName: string;
   userName: string;
   role: string;
   creatorName: string;
@@ -37,8 +45,16 @@ export class CourseComponent implements OnInit {
     private  courseService: CourseService,
     private authService: AuthService,
     private enrollmentService: EnrollmentService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar
   ) { }
+
+  addPostForm: FormGroup = this.formBuilder.group({
+
+    postContent: ['', [Validators.required] , [ blankValidator() ]]
+
+  })
 
   ngOnInit(): void {
 
@@ -63,22 +79,28 @@ export class CourseComponent implements OnInit {
 
         (course: Course) => {
           this.course = course;
-          // this.loadCourseCreator();
 
           if (currentUser) {
             this.isCreator = currentUser._id === this.course.creator;
-            console.log(this.isCreator);
-          }
+            this.course.posts.forEach(post => {
+              this.isAuthor = currentUser._id === post.author;
+            });
 
-          if  (this.isCreator) {
-            //this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
           }
 
           if (!this.isCreator) {
             this.userName = currentUser.lastName + ' ' + currentUser.firstName;
           }
 
-          //this.loadStudents();
+          if(this.isAuthor) {
+            this.authorName = currentUser.lastName + ' ' + currentUser.firstName;
+          }
+
+          if(!this.isAuthor) {
+
+          }
+
+          console.log(this.course);
           this.isLoading = false;
         },
         (error: any) => {
@@ -94,15 +116,10 @@ export class CourseComponent implements OnInit {
 
         (course: Course) => {
           this.course = course;
-          // this.loadCourseCreator();
+
 
           if (currentUser) {
             this.isCreator = currentUser._id === this.course.creator;
-            console.log(this.isCreator);
-          }
-
-          if  (this.isCreator) {
-            //this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
           }
 
           if (!this.isCreator) {
@@ -152,7 +169,7 @@ export class CourseComponent implements OnInit {
     .afterClosed()
     .subscribe(
       result =>{
-        this.loadCourse(this.course._id, 0);
+        this.loadCourse(this.course._id, 1);
       }
     );
   }
@@ -202,4 +219,37 @@ export class CourseComponent implements OnInit {
       }
     );
   }
+
+  onAddPost(){
+
+    const currentUser: UserData = this.authService.getUser();
+
+    const post: any = {
+      posts : [{...this.addPostForm.value, author: currentUser._id}]
+    };
+    console.log(post);
+    if (this.addPostForm.invalid){
+      return;
+    }
+    // if (currentUser) {
+    //   post.posts.author = currentUser._id;
+    // }
+
+    this.courseService.addPost(post, this.course._id).subscribe(
+
+      (response: any) => {
+          //console.log(createdPost);
+          this.snackBar.open('Le post a été créé avec succès!');
+          this.loadCourse(this.course._id, 0);
+          this.addPostForm.reset();
+      },
+      (error: any) => {
+          this.snackBar.open('Oups! Une erreur s\'est produite. Veuillez vérifier votre saisie et réessayer plus tard.');
+          console.log(error);
+      }
+    );
+
+  }
+
+
 }

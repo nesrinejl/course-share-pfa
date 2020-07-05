@@ -50,7 +50,6 @@ export class NewContentComponent implements OnInit {
 
     contentTitle: ['',  [Validators.required, Validators.maxLength(50)] , [ blankValidator() ]],
     content: ['',  [Validators.required, Validators.maxLength(500)] , [ blankValidator() ]],
-    //contentType: [ ContentTypeEnum.DOCUMENTATION ],
     documents: this.formBuilder.array([])
 
   });
@@ -86,7 +85,7 @@ export class NewContentComponent implements OnInit {
 
     },
     (error: any) => {
-        this.snackBar.open('Oups! Something went wrong, please verify your input and try again later.');
+        this.snackBar.open('Oups! Une erreur s\'est produite. Veuillez vérifier votre saisie et réessayer plus tard.');
         console.log(error);
     }
     );

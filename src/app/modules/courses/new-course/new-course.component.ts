@@ -54,7 +54,7 @@ export class NewCourseComponent {
           this.dialogRef.close(true);
       },
       (error: any) => {
-          this.snackBar.open('Oups! Something went wrong, please verify your input and try again later.');
+          this.snackBar.open('Oups! Une erreur s\'est produite. Veuillez vérifier votre saisie et réessayer plus tard.');
           console.log(error);
       }
 

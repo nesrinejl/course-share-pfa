@@ -12,7 +12,8 @@
 
         <div class="user-details-container" [matMenuTriggerFor]="menu">
             <span class="user-name">{{ user.lastName + " "+ user.firstName }}</span>
-            <span class="user-role"> {{ user.role }} </span>
+            <span class="user-role" *ngIf="user.role === 'Teacher'"> Enseignant </span>
+            <span class="user-role" *ngIf="user.role === 'Student'"> Étudiant </span>
         </div>
 
         <mat-menu #menu="matMenu">

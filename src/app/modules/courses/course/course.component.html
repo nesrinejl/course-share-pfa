@@ -8,30 +8,90 @@
 
     <mat-tab-group mat-stretch-tabs (selectedIndexChange)="loadCourse(course._id, $event)">
         <mat-tab label=" Flux ">
-            <div class="tab-content-container ">
+            <div class="tab-content-container">
                 <div class="progress-spinner-container " *ngIf="isLoading ">
                     <mat-spinner [diameter]="50 " [strokeWidth]="4 "></mat-spinner>
                 </div>
 
-                <mat-card class="flux-card ">
+                <mat-card class="flux-card" *ngIf="!isLoading">
                     <mat-card-header>
                         <mat-card-title>
-
-                            <p class="course-name ">{{ course.courseName }}</p>
-                            <h3 class="course-description ">{{ course.courseDescription }}</h3>
+                            <p class="course-name">{{ course.courseName }}</p>
+                            <h3 class="course-description">{{ course.courseDescription }}</h3>
                         </mat-card-title>
                     </mat-card-header>
-                    <mat-card-content>
-                    </mat-card-content>
+                    <mat-card-content></mat-card-content>
                 </mat-card>
-                <div class="card-container ">
-                    <mat-card class="chapters-card " *ngFor="let chapter of course.chapters ">
+
+                <div class="card-container">
+                    <mat-accordion class="content-headers-align" *ngIf="!isLoading">
+                        <mat-expansion-panel class="posts-panel md-elevation-zX">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Partager une information avec votre classe...
+                                </mat-panel-title>
+
+                            </mat-expansion-panel-header>
+                            <form [formGroup]="addPostForm">
+                                <mat-form-field>
+                                    <mat-label>Partager avec votre classe</mat-label>
+                                    <textarea matInput id="postContent" formControlName="postContent" rows="5" required></textarea>
+                                    <mat-error *ngIf="addPostForm.get('postContent').hasError('required')">Ce champ est obligatoire.</mat-error>
+                                    <mat-error *ngIf="addPostForm.get('postContent').hasError('blank')">Le contenu doit avoir au moins un caractère.</mat-error>
+                                </mat-form-field>
+
+                                <mat-action-row>
+                                    <button mat-button class="primary-btn" (click)="onAddPost()">Publier</button>
+                                </mat-action-row>
+                            </form>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                    <mat-card class="chapters-card" *ngFor="let post of course.posts">
                         <mat-card-header>
-                            <!-- <p class="chapter-name ">{{ creator.lastName + ' ' + creator.firstName }} a publié un nouveau chapitre : {{ chapter.chapterName }}</p> -->
-                            <!--
-                            <div mat-card-avatar class="header-image ">
-                                <img class="documentation-icon " src="assets/imgs/book.png ">
-                            </div> -->
+                            <div class="user-info-container">
+                                <div class="user-image-container">
+                                    <img class="avatar" src="assets/imgs/user-a.png">
+                                </div>
+                                <div class="user-details-container">
+                                    <p class="chapter-name ">{{ authorName }} a ajouté une information</p>
+                                    <mat-card-subtitle>
+                                        Date de publication : {{ post.createdAt | date:'mediumDate'}}
+                                    </mat-card-subtitle>
+                                </div>
+
+                            </div>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <mat-accordion class="content-headers-align">
+                                <mat-expansion-panel hideToggle>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-description>
+                                            {{ post.postContent }}
+                                        </mat-panel-description>
+                                    </mat-expansion-panel-header>
+
+                                    <mat-form-field>
+                                        <mat-label>Ajouter un commentaire</mat-label>
+                                        <input matInput id="comment" formControlName="comment" rows="5">
+
+
+                                        <!-- <mat-error *ngIf="addPostForm.get('').hasError('required')">Ce champ est obligatoire.</mat-error>
+                                          <mat-error *ngIf="addPostForm.get('postContent').hasError('blank')">Le contenu doit avoir au moins un caractère.</mat-error> -->
+                                    </mat-form-field>
+                                    <button class="primary-btn" mat-mini-fab aria-label="send-icon">
+                                      <mat-icon>send</mat-icon>
+                                    </button>
+
+                                    <!-- <mat-action-row>
+                                        <button mat-button class="primary-btn">Publier</button>
+                                    </mat-action-row> -->
+
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </mat-card-content>
+                    </mat-card>
+                    <mat-card class="chapters-card" *ngFor="let chapter of course.chapters ">
+                        <mat-card-header>
                             <div class="user-info-container">
                                 <div class="user-image-container">
                                     <img class="avatar" src="assets/imgs/user-a.png">
@@ -43,42 +103,21 @@
                                     </mat-card-subtitle>
                                 </div>
                             </div>
-
                         </mat-card-header>
                         <mat-card-content>
-
-
                             <mat-accordion class="content-headers-align" *ngIf="chapter.content.length > 0 ">
                                 <mat-expansion-panel *ngFor="let content of chapter.content" hideToggle>
                                     <mat-expansion-panel-header>
-                                        <!-- <mat-panel-title>
-                                            {{ content.contentTitle }}
-                                        </mat-panel-title> -->
                                         <mat-panel-description>
                                             {{ content.contentTitle }}
                                         </mat-panel-description>
-
-
                                     </mat-expansion-panel-header>
-
-
                                 </mat-expansion-panel>
-
                             </mat-accordion>
                         </mat-card-content>
                     </mat-card>
                 </div>
-                <mat-card class="flux-posts-card " *ngIf="role==='Teacher' ">
-                    <mat-card-content>
-                        <div class="sad-image-container ">
-                            <img class="sad-emoji " src="assets/imgs/chat.png ">
-                        </div>
-                        <div class="sad-details-container ">
-                            <p>Partager une information avec votre classe... </p>
-                        </div>
 
-                    </mat-card-content>
-                </mat-card>
             </div>
         </mat-tab>
         <mat-tab label="Chapitres">
@@ -145,7 +184,6 @@
                                                 <p class="content-name">
                                                     {{ content.contentTitle }}
                                                 </p>
-                                                <!-- <p class="date">{{ content.createdAt | date:'mediumDate'}}</p> -->
                                             </div>
 
                                         </div>

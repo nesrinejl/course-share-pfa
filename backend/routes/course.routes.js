@@ -55,4 +55,16 @@ router.get('', checkAuth, CourseController.getCoursesByStudentId);
 
 router.get('', checkAuth, CourseController.getCreatorByCourseId);
 
+/**
+ * add posts to course route
+ */
+router.post('/:courseId/posts', checkAuth, CourseController.addPost);
+
+/**
+ * get posts by courseId route
+ */
+
+router.get('/:courseId/posts', checkAuth, CourseController.getPostsByCourseId);
+
+
 module.exports = router;

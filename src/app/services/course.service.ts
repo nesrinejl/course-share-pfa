@@ -14,6 +14,7 @@ import { Chapter } from '../models/chapter.model';
 import { Content } from '../models/content.model';
 import { Document } from '../models/document.model';
 import { UserData } from '../models/user.model';
+import { Post } from '../models/post.model';
 
 const backendUrl  = environment.apiUrl + '/courses';
 
@@ -57,7 +58,7 @@ export class CourseService {
     return this.course;
   }
 
-  addChapter(chapter: any, courseId: string): Observable<any>{
+  addChapter(chapter: any, courseId: string): Observable<any> {
     return this.http.post<any>(backendUrl + '/' + courseId +'/chapters', chapter);
   }
 
@@ -102,12 +103,16 @@ export class CourseService {
 
   }
 
-  getCreatorByCourseId(courseId: string): Observable<any>{
+  getCreatorByCourseId(courseId: string): Observable<any> {
     const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
 
     options.params = new HttpParams();
     options.params = options.params.set('courseId', courseId);
 
     return this.http.get<any>(backendUrl, options);
+  }
+
+  addPost(post: Post, courseId: string): Observable<Post> {
+    return this.http.post<any>(backendUrl + '/' + courseId +'/posts', post);
   }
 }

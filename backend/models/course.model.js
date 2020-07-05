@@ -1,5 +1,36 @@
 const mongoose = require('mongoose');
 
+/**
+ * comment Schema
+ **/
+
+const commentSchema = mongoose.Schema({
+    commentContent: {
+        type: String,
+        required: true,
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }
+}, { timestamps: true });
+
+
+/**
+ * post Schema
+ **/
+
+const postSchema = mongoose.Schema({
+    postContent: {
+        type: String,
+        required: true,
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    comments: [commentSchema]
+}, { timestamps: true });
 
 /**
  * document Schema
@@ -60,6 +91,7 @@ const courseSchema = mongoose.Schema({
         type: String,
     },
     chapters: [chapterSchema],
+    posts: [postSchema],
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -69,6 +101,6 @@ const courseSchema = mongoose.Schema({
 module.exports = mongoose.model("Chapter", chapterSchema);
 module.exports = mongoose.model("Content", contentSchema);
 module.exports = mongoose.model("Document", documentSchema);
-
+module.exports = mongoose.model("Post", postSchema);
 
 module.exports = mongoose.model("Course", courseSchema);

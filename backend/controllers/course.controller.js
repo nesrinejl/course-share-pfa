@@ -75,7 +75,7 @@ exports.getCourseById = (req, res, next) => {
     const courseId = req.params.courseId;
 
     Course.findById(courseId)
-        .select("courseName courseDescription chapters")
+        .select("courseName courseDescription chapters posts")
         .exec()
         .then(course => {
 
@@ -202,38 +202,38 @@ exports.addContent = async(req, res, next) => {
      * get chapter by Id
      */
 exports.getChapterById = (req, res, next) => {
-        const chapterId = req.params.chapterId;
-        const courseId = req.params.courseId;
+    const chapterId = req.params.chapterId;
+    const courseId = req.params.courseId;
 
-        Course.findById(courseId)
-            .select("chapters")
-            .exec()
-            .then(course => {
+    Course.findById(courseId)
+        .select("chapters")
+        .exec()
+        .then(course => {
 
-                if (!course) {
-                    return res.status(404).json({
-                        message: "Course not found !",
-                    })
+            if (!course) {
+                return res.status(404).json({
+                    message: "Course not found !",
+                })
+            }
+            for (let i = 0; i < course.chapters.length; i++) {
+                if (course.chapters[i]._id == chapterId) {
+                    chapter = course.chapters[i];
                 }
-                for (let i = 0; i < course.chapters.length; i++) {
-                    if (course.chapters[i]._id == chapterId) {
-                        chapter = course.chapters[i];
-                    }
-                }
-                res.status(200).json(
-                    chapter
-                );
-            })
-            .catch(
-                err => {
-                    console.log(err);
-                    res.status(500).json({ error: err });
-                }
+            }
+            res.status(200).json(
+                chapter
             );
-    }
-    /**
-     * get chapters by courseId
-     */
+        })
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({ error: err });
+            }
+        );
+};
+/**
+ * get chapters by courseId
+ */
 exports.getChaptersByCourseId = (req, res) => {
     const courseId = req.params.courseId;
     Course
@@ -262,6 +262,9 @@ exports.getChaptersByCourseId = (req, res) => {
         );
 }
 
+/**
+ * get course by studentId
+ */
 exports.getCoursesByStudentId = async(req, res, next) => {
 
     const studentId = req.query.studentId;
@@ -284,6 +287,9 @@ exports.getCoursesByStudentId = async(req, res, next) => {
     }
 }
 
+/**
+ * get creator by courseId
+ */
 exports.getCreatorByCourseId = async(req, res, next) => {
 
     if (req.query.courseId == undefined) {
@@ -298,4 +304,66 @@ exports.getCreatorByCourseId = async(req, res, next) => {
     } catch (err) {
         next(err);
     }
+}
+
+/**
+ * ads posts to course
+ */
+exports.addPost = (req, res, next) => {
+
+    const courseId = req.params.courseId;
+
+    Course.findByIdAndUpdate({ _id: courseId }, { $addToSet: { posts: req.body.posts } })
+        .exec()
+        .then(
+            result => {
+                console.log(result);
+                if (!result) {
+                    return res.status(404).json({
+                        message: "Course not found !",
+                    })
+                }
+                res.status(200).json({
+                    message: "Post added successfully!",
+                    result
+                });
+            }
+        )
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({ error: err });
+            }
+        );
+}
+
+/**
+ * get posts by courseId
+ */
+exports.getPostsByCourseId = (req, res) => {
+    const courseId = req.params.courseId;
+    Course
+        .findById(courseId)
+        .select("posts")
+        .then(
+            posts => {
+
+                if (!posts) {
+                    return res.status(404).json({
+                        message: "Posts not found !",
+                    })
+                }
+
+                res.status(200).json(
+                    posts
+                );
+            })
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            }
+        );
 }

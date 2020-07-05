@@ -3,8 +3,7 @@ import { FormBuilder, Validators, FormGroup  } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { blankValidator } from '../../../utils/validators.util';
 
@@ -28,7 +27,8 @@ export class NewChapterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     public dialogRef: MatDialogRef<NewChapterComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private snackBar: MatSnackBar,
     ) { }
 
   newChapterForm: FormGroup = this.formBuilder.group({
@@ -56,9 +56,11 @@ export class NewChapterComponent implements OnInit {
     // }
     this.courseService.addChapter(chapter, this.data.courseId).subscribe(
       (createdChapter: Chapter) => {
+          this.snackBar.open('Le chapitre a été ajouté avec succès!');
           this.dialogRef.close(createdChapter);
       },
       (error: any) => {
+          this.snackBar.open('Oups! Une erreur s\'est produite. Veuillez vérifier votre saisie et réessayer plus tard.');
           console.log(error);
       }
     );
