@@ -87,11 +87,11 @@ export class NewContentComponent implements OnInit {
     (error: any) => {
         this.snackBar.open('Oups! Une erreur s\'est produite. Veuillez vérifier votre saisie et réessayer plus tard.');
         console.log(error);
-    }
-    );
+    });
 
 
   }
+
   loadCourse(courseId: string) {
     const currentUser : UserData = this.authService.getUser();
 

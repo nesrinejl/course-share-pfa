@@ -31,4 +31,14 @@ export class EnrollmentService {
 
     return this.http.get<UserData[]>(backendUrl, options);
   }
+
+  getStudentsNumberByCourseId(courseId: string): Observable<any> {
+
+    const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
+
+    options.params = new HttpParams();
+    options.params = options.params.set('id', courseId);
+
+    return this.http.get<any>(backendUrl, options);
+  }
 }

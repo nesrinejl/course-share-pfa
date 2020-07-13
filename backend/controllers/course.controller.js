@@ -5,6 +5,7 @@ const Course = require('../models/course.model');
 const Chapter = require('../models/course.model');
 const Enrollment = require('../models/enrollment.model');
 const User = require('../models/user.model');
+const Comment = require('../models/course.model');
 /**
  * create course
  */
@@ -40,37 +41,38 @@ exports.createCourse = (req, res, next) => {
  */
 exports.getCoursesByCreatorId = (req, res, next) => {
 
-        if (req.query.creatorId == undefined) {
-            return next();
-        }
-        const creatorId = req.query.creatorId;
-
-        Course
-            .find({ creator: creatorId })
-            .then(
-                courses => {
-                    if (!courses) {
-                        return res.status(404).json({
-                            message: "Course not found !",
-                        })
-                    }
-                    res.status(200).json(
-                        courses,
-
-                    );
-                })
-            .catch(
-                err => {
-                    console.log(err);
-                    res.status(500).json({
-                        error: err
-                    });
-                }
-            );
+    if (req.query.creatorId == undefined) {
+        return next();
     }
-    /**
-     * get course by Id
-     */
+    const creatorId = req.query.creatorId;
+
+    Course
+        .find({ creator: creatorId })
+        .then(
+            courses => {
+                if (!courses) {
+                    return res.status(404).json({
+                        message: "Course not found !",
+                    })
+                }
+                res.status(200).json(
+                    courses,
+
+                );
+            })
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                });
+            }
+        );
+}
+
+/**
+ * get course by Id
+ */
 exports.getCourseById = (req, res, next) => {
     const courseId = req.params.courseId;
 
@@ -97,110 +99,110 @@ exports.getCourseById = (req, res, next) => {
         );
 }
 
+
 /**
  * add chapter to course
  */
 
 exports.addChapter = (req, res, next) => {
-        const courseId = req.params.courseId;
+    const courseId = req.params.courseId;
 
-        Course.findByIdAndUpdate({ _id: courseId }, { $addToSet: { chapters: req.body.chapters } })
-            .exec()
-            .then(
-                result => {
-                    console.log(result);
-                    if (!result) {
-                        return res.status(404).json({
-                            message: "Course not found !",
-                        })
-                    }
-                    res.status(200).json({
-                        message: "Chapter created successfully!",
-                        result
-                    });
+    Course.findByIdAndUpdate({ _id: courseId }, { $addToSet: { chapters: req.body.chapters } })
+        .exec()
+        .then(
+            result => {
+                console.log(result);
+                if (!result) {
+                    return res.status(404).json({
+                        message: "Course not found !",
+                    })
                 }
-            )
-            .catch(
-                err => {
-                    console.log(err);
-                    res.status(500).json({ error: err });
-                }
-            );
-    }
-    /**
-     * add content to chapter
-     */
+                res.status(200).json({
+                    message: "Chapter created successfully!",
+                    result
+                });
+            }
+        )
+        .catch(
+            err => {
+                console.log(err);
+                res.status(500).json({ error: err });
+            }
+        );
+}
+
+/**
+ * add content to chapter
+ */
 
 exports.addContent = async(req, res, next) => {
-        const url = req.protocol + '://' + req.get('host');
+    const url = req.protocol + '://' + req.get('host');
 
-        const chapterId = req.params.chapterId;
-        const courseId = req.params.courseId;
-        try {
-            const course = await Course.findOne({
-                _id: courseId
-            });
+    const chapterId = req.params.chapterId;
+    const courseId = req.params.courseId;
+    try {
+        const course = await Course.findOne({
+            _id: courseId
+        });
 
-            for (let i = 0; i < course.chapters.length; i++) {
-                if (course.chapters[i]._id == chapterId) {
+        for (let i = 0; i < course.chapters.length; i++) {
+            if (course.chapters[i]._id == chapterId) {
 
-                    var documents = [];
-                    var documentTypes = req.body.documentTypes;
-                    const documentFiles = req.files;
-                    console.log(documentFiles);
-                    if (documentFiles.length >= 1) {
-                        if (Array.isArray(documentTypes)) {
-                            for (let j = 0; j < documentTypes.length; j++) {
-                                console.log(documentFiles[j].filename);
-                                filePath = url + '/uploads/' + documentFiles[j].filename;
-                                documents.push({
-                                    documentType: documentTypes[j],
-                                    file: filePath
-                                });
-                            }
-                        } else {
-                            documentTypes = [req.body.documentTypes];
-                            for (let j = 0; j < documentTypes.length; j++) {
-                                console.log(documentFiles[j].filename);
-                                filePath = url + '/uploads/' + documentFiles[j].filename;
-
-                                documents.push({
-                                    documentType: documentTypes[j],
-                                    file: filePath
-                                });
-                            }
+                var documents = [];
+                var documentTypes = req.body.documentTypes;
+                const documentFiles = req.files;
+                console.log(documentFiles);
+                if (documentFiles.length >= 1) {
+                    if (Array.isArray(documentTypes)) {
+                        for (let j = 0; j < documentTypes.length; j++) {
+                            filePath = url + '/uploads/' + documentFiles[j].filename;
+                            documents.push({
+                                documentType: documentTypes[j],
+                                file: filePath
+                            });
+                        }
+                    } else {
+                        documentTypes = [req.body.documentTypes];
+                        for (let j = 0; j < documentTypes.length; j++) {
+                            filePath = url + '/uploads/' + documentFiles[j].filename;
+                            documents.push({
+                                documentType: documentTypes[j],
+                                file: filePath
+                            });
                         }
                     }
-
-                    console.log(req.body.contentTitle);
-
-                    course.chapters[i].content.push({
-                        contentTitle: req.body.contentTitle,
-                        contentType: req.body.contentType,
-                        content: req.body.content,
-                        documents: documents,
-                    });
                 }
-            }
-            course.save().then(
-                data => {
-                    return res.status(200).json({
-                        message: 'ok',
-                        data: data
-                    });
-                }
-            ).catch(
-                err => {
-                    res.status(500).json({ error: err });
+
+                console.log(req.body.contentTitle);
+
+                course.chapters[i].content.push({
+                    contentTitle: req.body.contentTitle,
+                    contentType: req.body.contentType,
+                    content: req.body.content,
+                    documents: documents,
                 });
-        } catch (err) {
-            next(err);
+            }
         }
-
+        course.save().then(
+            data => {
+                return res.status(200).json({
+                    message: 'ok',
+                    data: data
+                });
+            }
+        ).catch(
+            err => {
+                res.status(500).json({ error: err });
+            });
+    } catch (err) {
+        next(err);
     }
-    /**
-     * get chapter by Id
-     */
+
+}
+
+/**
+ * get chapter by Id
+ */
 exports.getChapterById = (req, res, next) => {
     const chapterId = req.params.chapterId;
     const courseId = req.params.courseId;
@@ -230,7 +232,8 @@ exports.getChapterById = (req, res, next) => {
                 res.status(500).json({ error: err });
             }
         );
-};
+}
+
 /**
  * get chapters by courseId
  */
@@ -292,12 +295,12 @@ exports.getCoursesByStudentId = async(req, res, next) => {
  */
 exports.getCreatorByCourseId = async(req, res, next) => {
 
-    if (req.query.courseId == undefined) {
+    if (req.params.courseId == undefined) {
         return next();
     }
-    console.log(req.query.courseId);
+    console.log(req.params.courseId);
     try {
-        const course = await Course.findById(req.query.courseId);
+        const course = await Course.findById(req.params.courseId);
         return res.status(200).json({
             creator: await User.findById(course.creator)
         });
@@ -366,4 +369,88 @@ exports.getPostsByCourseId = (req, res) => {
                 });
             }
         );
+}
+
+/**
+ * add comments to post
+ */
+exports.addComment = async(req, res, next) => {
+
+    const postId = req.params.postId;
+    const courseId = req.params.courseId;
+    const io = req.app.get('io');
+
+    try {
+        const course = await Course.findOne({
+            _id: courseId
+        });
+
+        for (let i = 0; i < course.posts.length; i++) {
+            if (course.posts[i]._id == postId) {
+
+                course.posts[i].comments.push({
+                    commentContent: req.body.commentContent,
+                    author: req.body.author
+                });
+
+            }
+        }
+
+        course.save().then(
+            (data) => {
+                io.emit('newCommentAdded', {
+                    message: 'ok',
+                    data: data
+                });
+            }
+        ).catch(
+            err => {
+                res.status(500).json({ error: err });
+            });
+    } catch (err) {
+        next(err);
+    }
+
+}
+
+/**
+ * get comments by postId
+ */
+exports.getCommentsByPostId = async(req, res, next) => {
+
+
+    const courseId = req.params.courseId;
+    const postId = req.params.postId;
+    try {
+        course = await Course.findById(courseId).select("posts");
+
+        if (!course) {
+            return res.status(404).json({
+                message: "Course not found !",
+            })
+        }
+        var comments = [];
+
+        for (let i = 0; i < course.posts.length; i++) {
+            if (course.posts[i]._id == postId) {
+
+                for (let j = 0; j < course.posts[i].comments.length; j++) {
+                    comments.push({
+                        commentContent: course.posts[i].comments[j].commentContent,
+                        author: await User.findOne({ _id: course.posts[i].comments[j].author })
+                    });
+                }
+
+            }
+        }
+
+        return res.status(200).json(
+            comments
+        );
+
+
+    } catch (err) {
+        console.log(err)
+    }
+
 }

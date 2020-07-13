@@ -151,7 +151,11 @@ exports.login = (req, res, next) => {
 }
 
 // get user by email
-exports.getUserByEmail = (req, res) => {
+exports.getUserByEmail = (req, res, next) => {
+
+    if (req.query.email == undefined) {
+        return next();
+    }
 
     User.find({ email: req.query.email })
         .exec()
@@ -163,8 +167,37 @@ exports.getUserByEmail = (req, res) => {
                 })
             }
             return res.status(200).json(
-
                 user[0]
+            );
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        })
+
+}
+
+// get user by ID
+exports.getUserById = (req, res, next) => {
+
+    if (req.query.userId == undefined) {
+        return next();
+    }
+
+    User.findById(req.query.userId)
+        .exec()
+        .then(user => {
+
+            if (!user) {
+                return res.status(404).json({
+                    message: "User not found !",
+                })
+            }
+
+            return res.status(200).json(
+                user
             );
         })
         .catch(err => {

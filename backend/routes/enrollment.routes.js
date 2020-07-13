@@ -18,6 +18,11 @@ router.post('/', checkAuth, EnrollmentController.addStudentToCourse);
 
 router.get('', checkAuth, EnrollmentController.getStudentsByCourseId);
 
+/**
+ * get students by courseId
+ */
+
+router.get('', checkAuth, EnrollmentController.getStudentsNumber);
 
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import { Chapter } from "../models/chapter.model";
+import { Chapter } from '../models/chapter.model';
 import { Post } from './post.model';
 
 export class Course {

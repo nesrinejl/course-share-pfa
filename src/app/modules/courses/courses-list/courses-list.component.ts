@@ -9,6 +9,7 @@ import { UserData } from '../../../models/user.model';
 
 import { NewCourseComponent } from 'src/app/modules/courses/new-course/new-course.component';
 import { MatDialog } from '@angular/material/dialog';
+import { EnrollmentService } from 'src/app/services/enrollment.service';
 
 @Component({
   selector: 'app-courses-list',
@@ -21,13 +22,15 @@ export class CoursesListComponent implements OnInit {
   isLoading = true;
   courses : Course[] = [];
 
+  studentsNumber : number;
   currentUser : UserData = this.authService.getUser();
 
   constructor(
     private router: Router,
     private authService: AuthService,
+    private enrollmentService: EnrollmentService,
     private courseService: CourseService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -35,13 +38,18 @@ export class CoursesListComponent implements OnInit {
     if (!this.currentUser) {
         return;
     }
-    console.log(this.currentUser);
 
     this.isLoading = true;
     if (this.currentUser.role === 'Teacher') {
       this.courseService.getCoursesByCreatorId(this.currentUser._id).subscribe(
         (courses: Course[]) => {
           this.courses = courses;
+          // this.courses.forEach((course: Course) => {
+          //  // console.log(course._id);
+
+          //   this.studentsNumber = this.loadStudentsNumber(course._id);
+
+          // });
           this.isLoading = false;
         },
         (error: any) => {
@@ -55,8 +63,11 @@ export class CoursesListComponent implements OnInit {
       this.courseService.getCoursesByStudentId(this.currentUser._id).subscribe(
         (result: any) => {
           this.courses = result.courses;
+          // this.courses.forEach((course: Course) => {
+          //   //console.log(course._id);
+          //   this.loadStudentsNumber(course._id);
+          // });
           this.isLoading = false;
-
         },
         (error: any) => {
           console.log(error);
@@ -78,6 +89,7 @@ export class CoursesListComponent implements OnInit {
   }
 
   navigateToCourseDetails(courseId: string) {
+
     if (this.currentUser.role === 'Teacher') {
       this.router.navigateByUrl('/teacher/courses/' + courseId);
     } else {
@@ -86,4 +98,18 @@ export class CoursesListComponent implements OnInit {
 
   }
 
+  loadStudentsNumber(courseId: string) {
+    console.log(courseId);
+    this.enrollmentService
+      .getStudentsNumberByCourseId(courseId)
+      .subscribe(
+        (result: any) => {
+          return this.studentsNumber = result.studentNumber;
+        },
+        (error: any) => {
+          console.log(error)
+        }
+      );
+
+  }
 }

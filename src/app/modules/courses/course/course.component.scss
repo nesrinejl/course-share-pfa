@@ -224,3 +224,18 @@ mat-card-title {
         margin-left: 24px;
     }
 }
+
+.comments-card {
+    box-shadow: none;
+    border: 1px solid #d8d8d8;
+}
+
+.comment-content {
+    display: inline-block;
+    width: 80%;
+    margin: 10px 10% 6px 1%;
+}
+
+.primary-btn {
+    display: inline-block;
+}

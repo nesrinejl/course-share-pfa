@@ -49,11 +49,12 @@ router.get('/:courseId/chapters', checkAuth, CourseController.getChaptersByCours
  */
 
 router.get('', checkAuth, CourseController.getCoursesByStudentId);
+
 /**
  * get creator by courseId
  */
 
-router.get('', checkAuth, CourseController.getCreatorByCourseId);
+router.get('/:courseId', checkAuth, CourseController.getCreatorByCourseId);
 
 /**
  * add posts to course route
@@ -66,5 +67,14 @@ router.post('/:courseId/posts', checkAuth, CourseController.addPost);
 
 router.get('/:courseId/posts', checkAuth, CourseController.getPostsByCourseId);
 
+/**
+ * add comments
+ */
+router.post('/:courseId/posts/:postId', checkAuth, CourseController.addComment);
 
+
+/**
+ * get comments by postId
+ */
+router.get('/:courseId/posts/:postId/comments', checkAuth, CourseController.getCommentsByPostId);
 module.exports = router;

@@ -33,7 +33,7 @@ export class CourseService {
 
   }
 
-// get course by creatorId
+// get courses by creatorId
   getCoursesByCreatorId(creatorId: string): Observable<Course[]> {
 
     const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
@@ -45,8 +45,8 @@ export class CourseService {
 
   }
 
-  //get course by Id
-  getCourseById(courseId: string) : Observable<Course> {
+  // get course by Id
+  getCourseById(courseId: string): Observable<Course> {
 
     const url = backendUrl + '/' + courseId;
 
@@ -54,24 +54,20 @@ export class CourseService {
 
   }
 
-  getCourseId() {
-    return this.course;
-  }
-
   addChapter(chapter: any, courseId: string): Observable<any> {
-    return this.http.post<any>(backendUrl + '/' + courseId +'/chapters', chapter);
+    return this.http.post<any>(backendUrl + '/' + courseId + '/chapters', chapter);
   }
 
-  getChapterById(chapterId: string, courseId: string) : Observable<Chapter> {
+  getChapterById(chapterId: string, courseId: string): Observable<Chapter> {
 
-    const url = backendUrl +'/' +  courseId +'/chapters/' + chapterId;
+    const url = backendUrl + '/' +  courseId + '/chapters/' + chapterId;
 
     return this.http.get<Chapter>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS);
 
   }
 
   getChaptersByCourseId(courseId: string): Observable<any> {
-    const url = backendUrl +'/' +  courseId +'/chapters/';
+    const url = backendUrl + '/' +  courseId + '/chapters/';
 
     return this.http.get<any>(url, FETCHING_JSON_REQUESTS_HTTP_OPTIONS );
 
@@ -79,17 +75,17 @@ export class CourseService {
 
   addContent(chapterId: string, courseId: string,  content: string, contentType: string, contentTitle: string,  documents: Document[]): Observable<Content> {
     const contentData = new FormData();
-    contentData.append("contentTitle", contentTitle);
-    contentData.append("content", content);
-    contentData.append("contentType", contentType);
+    contentData.append('contentTitle', contentTitle);
+    contentData.append('content', content);
+    contentData.append('contentType', contentType);
     documents.forEach((document) => {
-      contentData.append("documentTypes", document.documentType);
-      contentData.append("documents", document.file);
+      contentData.append('documentTypes', document.documentType);
+      contentData.append('documents', document.file);
     });
     console.log(contentData.getAll('content'));
     console.log(contentData.getAll('documents').values());
 
-    return this.http.post<Content>(backendUrl + '/' + courseId +'/chapters/' + chapterId  + '/add-content', contentData);
+    return this.http.post<Content>(backendUrl + '/' + courseId + '/chapters/' + chapterId  + '/add-content', contentData);
   }
 
   getCoursesByStudentId(studentId: string): Observable<Course[]> {
@@ -104,15 +100,18 @@ export class CourseService {
   }
 
   getCreatorByCourseId(courseId: string): Observable<any> {
-    const options = { ...FETCHING_JSON_REQUESTS_HTTP_OPTIONS };
-
-    options.params = new HttpParams();
-    options.params = options.params.set('courseId', courseId);
-
-    return this.http.get<any>(backendUrl, options);
+    return this.http.get<any>(backendUrl + '/' + courseId);
   }
 
   addPost(post: Post, courseId: string): Observable<Post> {
-    return this.http.post<any>(backendUrl + '/' + courseId +'/posts', post);
+    return this.http.post<any>(backendUrl + '/' + courseId + '/posts', post);
+  }
+
+  addComment(comment: Comment, postId: string, courseId: string): Observable<Comment> {
+    return this.http.post<Comment>(backendUrl + '/' + courseId + '/posts/' + postId, comment);
+  }
+
+  getCommentByPostId(courseId: string, postId: string): Observable<any> {
+    return this.http.get<any>(backendUrl + '/' + courseId + '/posts/' + postId + '/comments');
   }
 }

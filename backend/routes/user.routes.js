@@ -8,9 +8,12 @@ const router = express.Router();
 router.post('/sign-up', UserController.signup);
 
 /**Login */
-router.post('/login',UserController.login);
+router.post('/login', UserController.login);
 
 // get user by email
 router.get("/", UserController.getUserByEmail);
+
+// get user byId
+router.get("", UserController.getUserById);
 
 module.exports = router;

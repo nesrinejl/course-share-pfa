@@ -58,7 +58,7 @@ exports.addStudentToCourse = async(req, res, next) => {
                     from: '"Course Share" <course.share.app@gmail.com>',
                     to: email,
                     subject: 'Invitation',
-                    html: '<b>Vous êtes invité à rejoindre le course' + course.courseName + '</b> <br>' +
+                    html: '<b>Vous êtes invité à rejoindre le cours ' + course.courseName + '</b> <br>' +
                         '<p>Cliquez sur le lien ci-dessous</p></br>' +
                         '<p>' + url + '</p>'
                 }
@@ -97,10 +97,42 @@ exports.addStudentToCourse = async(req, res, next) => {
                     studentId: student._id,
                     courseId: req.body.courseId,
                 });
+                const url = 'http://localhost:4200/student/courses/' + courseId;
+
+                let mailOptions = {
+                        from: '"Course Share" <course.share.app@gmail.com>',
+                        to: email,
+                        subject: 'Invitation',
+                        html: '<b>Vous avez été ajouté au cours ' + course.courseName + '</b>' +
+                            '<p>Cliquez sur le lien ci-dessous</p></br>' +
+                            '<p>' + url + '</p>'
+                    }
+                    // verify connection configuration
+                transporter.verify(function(error, success) {
+                    if (error) {
+                        throw new Error('Something went wrong')
+                        console.log(error);
+                    } else {
+                        console.log("Server is ready to take our messages");
+                    }
+                });
+                transporter.sendMail(mailOptions, (error, data) => {
+                    if (error) {
+                        //throw new Error('Something went wrong');
+                        console.log(error);
+                    }
+                    console.log(data);
+                    return res.status(200).send({
+                        "status": true,
+                        "message": "Email send successfully."
+                    });
+
+                });
 
                 enrollment
                     .save()
                     .then(createdEnrollment => {
+
                         console.log(student._id)
                         res.status(201).json({
                             message: 'Student added to this course successfully!',
@@ -133,6 +165,10 @@ exports.addStudentToCourse = async(req, res, next) => {
 exports.getStudentsByCourseId = async(req, res, next) => {
 
     const courseId = req.query.courseId;
+    if (courseId == undefined) {
+        return next();
+    }
+
     try {
         const enrollment = await Enrollment.find({ courseId: courseId });
 
@@ -141,6 +177,26 @@ exports.getStudentsByCourseId = async(req, res, next) => {
         return res.status(200).json({
             students: await User.find({ '_id': { $in: studentIds } })
         });
+    } catch (err) {
+        next(err);
+    }
+
+}
+
+exports.getStudentsNumber = async(req, res, next) => {
+
+    const id = req.query.id;
+    if (id == undefined) {
+        return next();
+    }
+    try {
+        const enrollment = await Enrollment.find({ courseId: id });
+        var studentIds = enrollment.map((enrollment) => enrollment.studentId);
+
+        return res.status(200).json({
+            studentNumber: studentIds.length
+        });
+
     } catch (err) {
         next(err);
     }

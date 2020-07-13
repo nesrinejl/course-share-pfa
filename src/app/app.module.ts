@@ -20,6 +20,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { CourseService } from './services/course.service'
 import { EnrollmentService } from './services/enrollment.service';
 import { LoaderService } from './services/loader.service';
+import { UserService } from './services/user.service';
 
 
 
@@ -43,6 +44,7 @@ import { LoaderService } from './services/loader.service';
     EnrollmentService,
     CourseService,
     LoaderService,
+    UserService,
     AuthGuard,
     AuthorizationGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

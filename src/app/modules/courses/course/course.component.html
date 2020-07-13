@@ -17,7 +17,7 @@
                     <mat-card-header>
                         <mat-card-title>
                             <p class="course-name">{{ course.courseName }}</p>
-                            <h3 class="course-description">{{ course.courseDescription }}</h3>
+                            <h3 class="course-description">{{ course.courseDescription }} <br> {{ students.length }} étudiants</h3>
                         </mat-card-title>
                     </mat-card-header>
                     <mat-card-content></mat-card-content>
@@ -55,38 +55,51 @@
                                 <div class="user-details-container">
                                     <p class="chapter-name ">{{ authorName }} a ajouté une information</p>
                                     <mat-card-subtitle>
-                                        Date de publication : {{ post.createdAt | date:'mediumDate'}}
+                                        Date de publication : {{ post.createdAt | date:'mediumDate' }}
                                     </mat-card-subtitle>
                                 </div>
-
                             </div>
                         </mat-card-header>
-                        <mat-card-content>
+                        <mat-card-content *ngIf="course.posts.length >= 1">
                             <mat-accordion class="content-headers-align">
-                                <mat-expansion-panel hideToggle>
-                                    <mat-expansion-panel-header>
-                                        <mat-panel-description>
-                                            {{ post.postContent }}
-                                        </mat-panel-description>
-                                    </mat-expansion-panel-header>
+                                <mat-card class="comments-card">
 
-                                    <mat-form-field>
-                                        <mat-label>Ajouter un commentaire</mat-label>
-                                        <input matInput id="comment" formControlName="comment" rows="5">
+                                    <mat-card-subtitle>
+                                        {{ post.postContent }}
+                                    </mat-card-subtitle>
 
+                                    <form [formGroup]="addCommentForm">
+                                        <mat-form-field class="comment-content">
+                                            <mat-label>Ajouter un commentaire</mat-label>
+                                            <input matInput id="commentContent" formControlName="commentContent" (keyup.enter)="onAddComment(post._id)" size="100px">
+                                            <mat-error *ngIf="addPostForm.get('postContent').hasError('blank')"></mat-error>
+                                        </mat-form-field>
+                                        <button class="primary-btn" mat-mini-fab aria-label="send" (click)="onAddComment(post._id)"><mat-icon>send</mat-icon></button>
+                                    </form>
 
-                                        <!-- <mat-error *ngIf="addPostForm.get('').hasError('required')">Ce champ est obligatoire.</mat-error>
-                                          <mat-error *ngIf="addPostForm.get('postContent').hasError('blank')">Le contenu doit avoir au moins un caractère.</mat-error> -->
-                                    </mat-form-field>
-                                    <button class="primary-btn" mat-mini-fab aria-label="send-icon">
-                                      <mat-icon>send</mat-icon>
-                                    </button>
+                                    <mat-card-content *ngIf="post.comments.length > 0">
+                                        <mat-accordion class="content-headers-align">
+                                            <mat-expansion-panel hideToggle>
+                                                <mat-expansion-panel-header>
+                                                    <mat-panel-description>
+                                                        {{ post.comments.length }} . commentaires
+                                                        <mat-icon>comment</mat-icon>
+                                                    </mat-panel-description>
+                                                </mat-expansion-panel-header>
+                                                <div *ngFor="let comment of comments">
+                                                    <div class="user-details-container">
+                                                        <p class="chapter-name ">{{ comment.author.lastName + ' ' + comment.author.firstName }}</p>
+                                                        <mat-card-subtitle>
+                                                            {{ comment.commentContent }}
+                                                            <!-- Date de publication : {{ post.createdAt | date:'mediumDate' }} -->
+                                                        </mat-card-subtitle>
+                                                    </div>
 
-                                    <!-- <mat-action-row>
-                                        <button mat-button class="primary-btn">Publier</button>
-                                    </mat-action-row> -->
-
-                                </mat-expansion-panel>
+                                                </div>
+                                            </mat-expansion-panel>
+                                        </mat-accordion>
+                                    </mat-card-content>
+                                </mat-card>
                             </mat-accordion>
                         </mat-card-content>
                     </mat-card>
@@ -155,10 +168,8 @@
                                     <mat-card-subtitle>Date de publication: {{ chapter.createdAt | date:'mediumDate'}}</mat-card-subtitle>
                                 </div>
                             </mat-card-title>
-
                             <hr>
                             <mat-card-content *ngIf="!chapter.content || chapter.content.length <= 0">
-
                                 <div class="sad-container">
                                     <div class="sad-image-container">
                                         <img class="sad-emoji" src="assets/imgs/sad.png">
@@ -168,31 +179,23 @@
                                         <h3 *ngIf="role === 'Teacher'"> Ajouter du contenu à votre chapitre... </h3>
                                     </div>
                                 </div>
-
                             </mat-card-content>
                             <mat-card-content *ngIf="chapter.content && chapter.content.length > 0 ">
                                 <mat-list *ngFor="let content of chapter.content,  let lastItem = last;">
-
                                     <mat-list-item>
-
                                         <div class="content">
                                             <div class="content-icon-container">
                                                 <img class="content-icon" src="assets/imgs/book.png">
                                             </div>
-
                                             <div class="right">
                                                 <p class="content-name">
                                                     {{ content.contentTitle }}
                                                 </p>
                                             </div>
-
                                         </div>
-
                                     </mat-list-item>
                                     <mat-divider *ngIf="!lastItem"></mat-divider>
-
                                 </mat-list>
-
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -200,7 +203,6 @@
             </div>
 
         </mat-tab>
-
 
         <mat-tab label="Personnes">
             <div class="tab-content-container">
