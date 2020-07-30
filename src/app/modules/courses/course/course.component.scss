@@ -183,7 +183,6 @@ mat-card-title {
     justify-content: flex-start;
     padding: 6px;
     border-radius: 4px;
-    cursor: pointer;
 }
 
 .header-image {
@@ -238,4 +237,18 @@ mat-card-title {
 
 .primary-btn {
     display: inline-block;
+}
+
+.profile-picture {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #7bb6fd;
+    border: none;
+}
+
+.date {
+    font-size: smaller;
+    color: rgb(148, 148, 148);
 }

@@ -104,7 +104,11 @@ export class CourseService {
   }
 
   addPost(post: Post, courseId: string): Observable<Post> {
-    return this.http.post<any>(backendUrl + '/' + courseId + '/posts', post);
+    return this.http.post<Post>(backendUrl + '/' + courseId + '/posts', post);
+  }
+
+  getPostsByCourseId(courseId: string): Observable<any> {
+    return this.http.get<any>(backendUrl + '/' + courseId + '/posts');
   }
 
   addComment(comment: Comment, postId: string, courseId: string): Observable<Comment> {

@@ -17,10 +17,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthorizationGuard } from './guards/authorization.guard';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { CourseService } from './services/course.service'
+import { CourseService } from './services/course.service';
 import { EnrollmentService } from './services/enrollment.service';
 import { LoaderService } from './services/loader.service';
 import { UserService } from './services/user.service';
+import { SharedModule } from './modules/shared/shared.module';
 
 
 
@@ -30,6 +31,7 @@ import { UserService } from './services/user.service';
     AppLayoutComponent,
     HeaderComponent,
 
+
   ],
   imports: [
     BrowserModule,
@@ -38,6 +40,7 @@ import { UserService } from './services/user.service';
     AngularMaterialModule,
     ReactiveFormsModule,
     HttpClientModule,
+    SharedModule
 
   ],
   providers: [

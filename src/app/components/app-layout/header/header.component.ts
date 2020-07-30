@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
 
   user: UserData;
   userRole: string;
+  fullName: string;
 
   displayLoader = false;
 
@@ -36,10 +37,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
 
     this.user = this.authService.getUser();
+    this.fullName = this.user.lastName + ' ' + this.user.firstName;
     this.userRole = this.authService.getUserRole();
     this.loaderSubscription = this.loaderService.displayLoader().subscribe(
       (displayLoader) => this.displayLoader = displayLoader
     );
+
   }
 
   onLogout() {
@@ -64,8 +67,7 @@ export class HeaderComponent implements OnInit {
   navigateToCourses() {
     if (this.user.role === 'Teacher') {
       this.router.navigateByUrl('/teacher/courses');
-    }
-    else {
+    } else {
       this.router.navigateByUrl('/student/courses');
     }
 }

@@ -33,12 +33,14 @@ export class CourseComponent implements OnInit {
 
   students: UserData[] = [];
   comments = [];
+  posts = [];
   currentUser: UserData;
   author: UserData;
   course: Course = new Course();
   creator: UserData;
 
   authorName: string;
+  postAuthorName: string;
   commentAuthorName: string;
   userName: string;
   role: string;
@@ -76,12 +78,10 @@ export class CourseComponent implements OnInit {
         this.loadCourse(paramMap.get('courseId'), 0);
 
         this.loadCourseCreator(paramMap.get('courseId'));
-        console.log(paramMap.get('courseId'));
-
-        this.socket.on('newCommentAdded', (data) => {
-          this.snackBar.open('Un nouveau commentaire!');
-          this.loadCourse(paramMap.get('courseId'), 0);
-        });
+        // this.socket.on('newCommentAdded', (data) => {
+        //   this.snackBar.open('Un nouveau commentaire!');
+        //  // this.loadCourse(paramMap.get('courseId'), 0);
+        // });
       }
     );
   }
@@ -92,39 +92,33 @@ export class CourseComponent implements OnInit {
     const currentUser: UserData = this.authService.getUser();
     this.role = currentUser.role;
 
-
     if (selectedTabIndex === 0 || selectedTabIndex === 1) {
       this.isLoading = true;
-
+      console.log(courseId);
       this.courseService.getCourseById(courseId).subscribe(
 
-        (course: Course) => {
-          this.course = course;
+        (result: any) => {
+          this.course = result.course;
 
           if (currentUser) {
             this.isCreator = currentUser._id === this.course.creator;
-            this.course.posts.forEach(post => {
-              this.isAuthor = currentUser._id === post.author;
-            });
-
           }
 
           if (!this.isCreator) {
             this.userName = currentUser.lastName + ' ' + currentUser.firstName;
           }
-
-          if (this.isAuthor) {
-            this.authorName = currentUser.lastName + ' ' + currentUser.firstName;
-          }
-
-          if (!this.isAuthor) {
-
-          }
-
+          this.socket.on('newCommentAdded', (data) => {
+            this.snackBar.open('Un nouveau commentaire!');
+            this.course.posts.forEach(post => {
+              this.loadComments(post._id);
+            });
+           // this.loadCourse(paramMap.get('courseId'), 0);
+          });
+          this.loadPosts(this.course._id);
           this.course.posts.forEach(post => {
             this.loadComments(post._id);
           });
-
+          this.loadStudents();
           this.isLoading = false;
         },
         (error: any) => {
@@ -138,9 +132,8 @@ export class CourseComponent implements OnInit {
 
       this.courseService.getCourseById(courseId).subscribe(
 
-        (course: Course) => {
-          this.course = course;
-
+        (result: any) => {
+          this.course = result.course;
 
           if (currentUser) {
             this.isCreator = currentUser._id === this.course.creator;
@@ -149,9 +142,7 @@ export class CourseComponent implements OnInit {
           if (!this.isCreator) {
             this.userName = currentUser.lastName + ' ' + currentUser.firstName;
           }
-          console.log(this.course.posts);
           this.course.posts.forEach(post => {
-            console.log(post);
             this.loadComments(post._id);
           });
           this.loadStudents();
@@ -161,76 +152,11 @@ export class CourseComponent implements OnInit {
           console.log(error);
           this.isLoading = false;
         }
-      )
+      );
     }
 
 
   }
-
-  // loadCourse(courseId: string, selectedTabIndex: number) {
-
-  //   const currentUser: UserData = this.authService.getUser();
-  //   this.role = currentUser.role;
-  //   if (selectedTabIndex === 0 || selectedTabIndex === 1) {
-  //     this.isLoading = true;
-  //     this.courseService.getCourseById(courseId).subscribe(
-
-  //       (course: Course) => {
-  //         this.course = course;
-  //         if (currentUser) {
-  //           this.isCreator = currentUser._id === this.course.creator;
-  //         }
-  //         console.log(this.course);
-
-  //         if (!this.isCreator) {
-  //           this.userName = currentUser.lastName + ' ' + currentUser.firstName;
-  //         }
-  //       //   this.course.posts.forEach(post => {
-  //       //   this.loadCommentAuthor(post._id);
-  //       //   // this.userService.getUserById(post.author).subscribe(
-  //       //   //   (author: UserData) => {
-  //       //   //     this.authorName = author.lastName + ' ' + author.firstName;
-  //       //   //     this.isLoading = false;
-  //       //   //   },
-  //       //   //   (error: any) => {
-  //       //   //       this.isLoading = false;
-  //       //   //   }
-  //       //   //   );
-  //       // });
-  //        // this.loadStudents();
-  //         this.isLoading = false;
-  //       },
-  //       (error: any) => {
-  //         console.log(error);
-  //         this.isLoading = false;
-  //       }
-  //     );
-  //   }
-  //   if (selectedTabIndex === 2) {
-
-  //     this.isLoading = true;
-  //     this.courseService.getCourseById(courseId).subscribe(
-
-  //       (course: Course) => {
-  //         this.course = course;
-
-  //         if (currentUser) {
-  //           this.isCreator = currentUser._id === this.course.creator;
-  //         }
-
-  //         if (!this.isCreator) {
-  //           this.userName = currentUser.lastName + ' ' + currentUser.firstName;
-  //         }
-
-  //         //this.loadStudents();
-  //         this.isLoading = false;
-  //       },
-  //       (error: any) => {
-  //         console.log(error);
-  //         this.isLoading = false;
-  //       });
-  //   }
-  // }
 
   loadCourseCreator(courseId: string) {
 
@@ -239,7 +165,7 @@ export class CourseComponent implements OnInit {
       .subscribe(
         (result: any) => {
           this.creator = result.creator;
-         // return this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
+          this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
         },
         (error: any) => {
 
@@ -354,7 +280,7 @@ export class CourseComponent implements OnInit {
       () => {
 
         this.snackBar.open('Un commentaire ajouté!');
-        this.loadCourse(this.course._id, 0);
+        //this.loadCourse(this.course._id, 0);
         this.addCommentForm.reset();
 
       },
@@ -377,6 +303,21 @@ export class CourseComponent implements OnInit {
         (result: any) => {
             this.comments = result;
             console.log(this.comments);
+        },
+        (error: any) => {
+          console.log(error);
+        }
+      );
+  }
+
+
+  loadPosts(courseId: string) {
+
+    this.courseService
+      .getPostsByCourseId(courseId)
+      .subscribe(
+        (result: any) => {
+          this.posts = result;
         },
         (error: any) => {
           console.log(error);

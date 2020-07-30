@@ -6,6 +6,7 @@ const Chapter = require('../models/course.model');
 const Enrollment = require('../models/enrollment.model');
 const User = require('../models/user.model');
 const Comment = require('../models/course.model');
+const { timeStamp } = require("console");
 /**
  * create course
  */
@@ -73,30 +74,26 @@ exports.getCoursesByCreatorId = (req, res, next) => {
 /**
  * get course by Id
  */
-exports.getCourseById = (req, res, next) => {
+exports.getCourseById = async(req, res, next) => {
+
     const courseId = req.params.courseId;
+    try {
+        course = await Course.findById(courseId).select("courseName courseDescription chapters posts creator");
 
-    Course.findById(courseId)
-        .select("courseName courseDescription chapters posts")
-        .exec()
-        .then(course => {
+        if (!course) {
+            return res.status(404).json({
+                message: "Course not found !",
+            })
+        }
+        return res.status(200).json({
+            course,
+            creator: await User.findOne({ _id: course.creator })
 
-            if (!course) {
-                return res.status(404).json({
-                    message: "Course not found !",
-                })
-            }
-            res.status(200).json(
+        });
+    } catch (err) {
+        console.log(err)
+    }
 
-                course,
-            );
-        })
-        .catch(
-            err => {
-                console.log(err);
-                res.status(500).json({ error: err });
-            }
-        );
 }
 
 
@@ -343,32 +340,33 @@ exports.addPost = (req, res, next) => {
 /**
  * get posts by courseId
  */
-exports.getPostsByCourseId = (req, res) => {
+exports.getPostsByCourseId = async(req, res) => {
     const courseId = req.params.courseId;
-    Course
-        .findById(courseId)
-        .select("posts")
-        .then(
-            posts => {
+    try {
+        const course = await Course.findById(courseId).select('posts');
+        postAuthorIds = course.posts.map((post) => post.author);
+        var posts = [];
+        for (let i = 0; i < course.posts.length; i++) {
 
-                if (!posts) {
-                    return res.status(404).json({
-                        message: "Posts not found !",
-                    })
-                }
+            posts.push({
+                _id: course.posts[i]._id,
+                postContent: course.posts[i].postContent,
+                comments: course.posts[i].comments,
+                createdAt: course.posts[i].createdAt,
+                author: await User.findOne({ _id: course.posts[i].author })
+            });
 
-                res.status(200).json(
-                    posts
-                );
-            })
-        .catch(
-            err => {
-                console.log(err);
-                res.status(500).json({
-                    error: err
-                });
-            }
+        }
+        res.status(200).json(
+            posts
         );
+    } catch (err) {
+        res.status(500).json({
+            error: err
+        });
+        console.log(err)
+    }
+
 }
 
 /**
@@ -437,18 +435,16 @@ exports.getCommentsByPostId = async(req, res, next) => {
                 for (let j = 0; j < course.posts[i].comments.length; j++) {
                     comments.push({
                         commentContent: course.posts[i].comments[j].commentContent,
+                        createdAt: course.posts[i].comments[j].createdAt,
                         author: await User.findOne({ _id: course.posts[i].comments[j].author })
                     });
                 }
 
             }
         }
-
         return res.status(200).json(
             comments
         );
-
-
     } catch (err) {
         console.log(err)
     }

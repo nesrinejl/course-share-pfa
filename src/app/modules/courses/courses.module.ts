@@ -16,6 +16,7 @@ import { NewContentComponent } from './new-content/new-content.component';
 import { ChapterComponent } from './chapter/chapter.component';
 import { ContentDetailCardComponent } from './content-detail-card/content-detail-card.component';
 import { AddStudentDialogComponent } from './add-student-dialog/add-student-dialog.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { AddStudentDialogComponent } from './add-student-dialog/add-student-dial
     CoursesRoutingModule,
     AngularMaterialModule,
     ReactiveFormsModule,
-    PdfViewerModule
+    PdfViewerModule,
+    SharedModule
 
   ],
   declarations: [
@@ -37,7 +39,8 @@ import { AddStudentDialogComponent } from './add-student-dialog/add-student-dial
     NewContentComponent,
     ChapterComponent,
     ContentDetailCardComponent,
-    AddStudentDialogComponent
+    AddStudentDialogComponent,
+
 
   ],
   entryComponents: [

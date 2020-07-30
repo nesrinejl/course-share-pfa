@@ -1,0 +1,14 @@
+.profile-picture {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    p {
+        font-size: small;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 36px;
+        text-transform: uppercase;
+        color: white;
+    }
+}
