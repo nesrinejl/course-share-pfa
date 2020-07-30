@@ -1,4 +1,4 @@
-import { Content } from "../models/content.model";
+import { Content } from '../models/content.model';
 
 export class Chapter {
   _id?: string;

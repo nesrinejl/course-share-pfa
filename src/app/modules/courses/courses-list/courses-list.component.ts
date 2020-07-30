@@ -20,10 +20,10 @@ import { EnrollmentService } from 'src/app/services/enrollment.service';
 export class CoursesListComponent implements OnInit {
 
   isLoading = true;
-  courses : Course[] = [];
+  courses: Course[] = [];
 
-  studentsNumber : number;
-  currentUser : UserData = this.authService.getUser();
+  studentsNumber: number;
+  currentUser: UserData = this.authService.getUser();
 
   constructor(
     private router: Router,
@@ -44,12 +44,6 @@ export class CoursesListComponent implements OnInit {
       this.courseService.getCoursesByCreatorId(this.currentUser._id).subscribe(
         (courses: Course[]) => {
           this.courses = courses;
-          // this.courses.forEach((course: Course) => {
-          //  // console.log(course._id);
-
-          //   this.studentsNumber = this.loadStudentsNumber(course._id);
-
-          // });
           this.isLoading = false;
         },
         (error: any) => {
@@ -63,10 +57,6 @@ export class CoursesListComponent implements OnInit {
       this.courseService.getCoursesByStudentId(this.currentUser._id).subscribe(
         (result: any) => {
           this.courses = result.courses;
-          // this.courses.forEach((course: Course) => {
-          //   //console.log(course._id);
-          //   this.loadStudentsNumber(course._id);
-          // });
           this.isLoading = false;
         },
         (error: any) => {
@@ -76,7 +66,6 @@ export class CoursesListComponent implements OnInit {
         }
       )
     }
-
   }
 
   openNewCourseDialog() {
@@ -98,18 +87,4 @@ export class CoursesListComponent implements OnInit {
 
   }
 
-  loadStudentsNumber(courseId: string) {
-    console.log(courseId);
-    this.enrollmentService
-      .getStudentsNumberByCourseId(courseId)
-      .subscribe(
-        (result: any) => {
-          return this.studentsNumber = result.studentNumber;
-        },
-        (error: any) => {
-          console.log(error)
-        }
-      );
-
-  }
 }

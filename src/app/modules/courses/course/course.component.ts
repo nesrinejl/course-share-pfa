@@ -6,7 +6,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { blankValidator } from '../../../utils/validators.util';
 
-
 import { AuthService } from '../../../services/auth.service';
 import { CourseService } from '../../../services/course.service';
 import { EnrollmentService } from '../../../services/enrollment.service';
@@ -14,9 +13,9 @@ import { UserService } from '../../../services/user.service';
 
 import { Course } from '../../../models/course.model';
 import { UserData } from '../../../models/user.model';
+
 import { NewChapterComponent } from '../new-chapter/new-chapter.component';
 import { AddStudentDialogComponent } from '../add-student-dialog/add-student-dialog.component';
-import { Post } from 'src/app/models/post.model';
 
 import * as io from 'socket.io-client';
 @Component({
@@ -112,7 +111,6 @@ export class CourseComponent implements OnInit {
             this.course.posts.forEach(post => {
               this.loadComments(post._id);
             });
-           // this.loadCourse(paramMap.get('courseId'), 0);
           });
           this.loadPosts(this.course._id);
           this.course.posts.forEach(post => {
@@ -154,12 +152,9 @@ export class CourseComponent implements OnInit {
         }
       );
     }
-
-
   }
 
   loadCourseCreator(courseId: string) {
-
     this.courseService
       .getCreatorByCourseId(courseId)
       .subscribe(
@@ -168,7 +163,6 @@ export class CourseComponent implements OnInit {
           this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
         },
         (error: any) => {
-
         }
       );
   }
@@ -182,7 +176,6 @@ export class CourseComponent implements OnInit {
         },
         width: '500px'
       }
-
     )
       .afterClosed()
       .subscribe(
@@ -203,7 +196,6 @@ export class CourseComponent implements OnInit {
   }
 
   loadStudents() {
-
     this.isLoading = true;
     this.enrollmentService
       .getStudentsByCourseId(this.course._id)
@@ -216,7 +208,6 @@ export class CourseComponent implements OnInit {
           this.isLoading = false;
         }
       );
-
   }
 
   onOpenAddStudentDialog() {
@@ -228,7 +219,6 @@ export class CourseComponent implements OnInit {
         },
         width: '500px'
       }
-
     )
       .afterClosed()
       .subscribe(
@@ -276,27 +266,19 @@ export class CourseComponent implements OnInit {
     }
 
     this.courseService.addComment(comment, postId, this.course._id).subscribe(
-
       () => {
-
         this.snackBar.open('Un commentaire ajouté!');
-        //this.loadCourse(this.course._id, 0);
         this.addCommentForm.reset();
-
       },
       (error: any) => {
-
         this.snackBar.open('Oups! Une erreur s\'est produite. Veuillez vérifier votre saisie et réessayer plus tard.');
         console.log(error);
-
       }
-
     );
   }
 
 
   loadComments(postId: string) {
-
     this.courseService
       .getCommentByPostId(this.course._id, postId)
       .subscribe(
@@ -312,7 +294,6 @@ export class CourseComponent implements OnInit {
 
 
   loadPosts(courseId: string) {
-
     this.courseService
       .getPostsByCourseId(courseId)
       .subscribe(

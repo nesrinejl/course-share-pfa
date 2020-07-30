@@ -21,7 +21,6 @@
         <mat-sidenav-content class="mat-sidenav-content">
             <div class="card-container">
                 <mat-card class="chapters-card  clickable-card" *ngIf="role === 'Teacher'" (click)="navigateToAddContent(course._id, chapter._id)" routerLinkActive="router-link-active">
-
                     <mat-card-header>
                         <mat-card-title>
                             <p class="chapter-name">{{ chapter.chapterName }}</p>
@@ -29,7 +28,6 @@
                     </mat-card-header>
                     <hr>
                     <mat-card-content>
-
                         <div class="sad-container">
                             <div class="sad-image-container">
                                 <img class="sad-emoji" src="assets/imgs/news.png">
@@ -38,56 +36,29 @@
                                 <h3> Ajouter du contenu à votre chapitre... </h3>
                             </div>
                         </div>
-
                     </mat-card-content>
                 </mat-card>
                 <div *ngIf="role === 'Student'">
                     <mat-card class="flux-card">
                         <mat-card-header>
                             <mat-card-title>
-
                                 <p class="course-name ">{{ chapter.chapterName }}</p>
-                                <!-- <h3 class="course-description ">{{ course.courseDescription }}</h3> -->
                             </mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
                         </mat-card-content>
                     </mat-card>
-                    <!-- <mat-card-title>
-                        <p class="chapter-name">{{ chapter.chapterName }}</p>
-                    </mat-card-title> -->
                 </div>
-                <!-- <mat-card class="chapters-card" *ngIf="role === 'Student'">
-
-                    <mat-card-header>
-                        <mat-card-title>
-                            <p class="chapter-name">{{ chapter.chapterName }}</p>
-                        </mat-card-title>
-                    </mat-card-header>
-                    <hr>
-                    <mat-card-content>
-
-                        <div class="sad-container">
-                            <div class="sad-image-container">
-                                <img class="sad-emoji" src="assets/imgs/news.png">
-                            </div>
-                            <div class="sad-details-container">
-                                <h3> Ce chapitre ne contient aucun contenu... </h3>
-                            </div>
-                        </div>
-
-                    </mat-card-content>
-                </mat-card> -->
             </div>
-            <div class="card-container" *ngIf="chapter.content && chapter.content.length > 0 ">
+            <div class="card-container" *ngIf="chapter.content && chapter.content.length > 0">
                 <mat-card class="chapters-content-card" *ngFor="let content of chapter.content">
                     <mat-card-header>
                         <mat-card-title>
-                            <p class="card-title">{{ creatorName }}</p>
+                            <p class="card-title">{{ creator.lastName + ' ' + creator.firstName }}</p>
                         </mat-card-title>
                         <mat-card-subtitle>{{ content.createdAt | date:'medium'}}</mat-card-subtitle>
                         <div mat-card-avatar class="header-user-image">
-                            <img src="assets/imgs/profile.png">
+                            <app-profile-picture class="profile-picture" [fullName]="creator.lastName + ' ' + creator.firstName"></app-profile-picture>
                         </div>
                     </mat-card-header>
                     <hr>
@@ -149,7 +120,7 @@
                                 </div>
                             </mat-expansion-panel>
                         </mat-accordion>
-                        <p class="info-text mat-body-1" *ngIf="content.documents.length <= 0 ">Aucun document!</p>
+                        <p class="info-text mat-body-1" *ngIf="content.documents.length <= 0">Aucun document!</p>
                     </mat-card-content>
                 </mat-card>
             </div>

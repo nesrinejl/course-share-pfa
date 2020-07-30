@@ -55,7 +55,7 @@
                                 <div class="user-details-container">
                                     <p class="chapter-name "> <b>{{ post.author.lastName + ' ' + post.author.firstName }}</b> a ajouté une information</p>
                                     <mat-card-subtitle>
-                                        Date de publication : {{ post.createdAt | date:'mediumDate' }}
+                                      Date de publication : {{ post.createdAt | date:'mediumDate' }}
                                     </mat-card-subtitle>
                                 </div>
                             </div>
@@ -67,7 +67,6 @@
                                     <mat-card-subtitle>
                                         {{ post.postContent }}
                                     </mat-card-subtitle>
-
                                     <form [formGroup]="addCommentForm">
                                         <mat-form-field class="comment-content">
                                             <mat-label>Ajouter un commentaire</mat-label>
@@ -93,9 +92,7 @@
                                                         </div>
                                                         <div class="user-details-container">
                                                             <p class="chapter-name ">{{ comment.author.lastName + ' ' + comment.author.firstName }} . <span class="date">{{ comment.createdAt | date:'mediumDate' }}</span></p>
-
                                                         </div>
-
                                                     </div>
                                                     <mat-card-subtitle>
                                                         {{ comment.commentContent }}

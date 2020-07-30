@@ -7,6 +7,7 @@ import { CourseService } from '../../../services/course.service';
 import { Course } from '../../../models/course.model';
 import { UserData } from '../../../models/user.model';
 import { Chapter } from '../../../models/chapter.model';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-chapter',
@@ -29,7 +30,7 @@ export class ChapterComponent implements OnInit {
   creatorName: string;
   role: string;
 
-  currentUser : UserData = this.authService.getUser();
+  currentUser: UserData = this.authService.getUser();
 
   constructor(
     private router: Router,
@@ -41,18 +42,17 @@ export class ChapterComponent implements OnInit {
   ngOnInit(): void {
 
     this.activatedRoute.paramMap.subscribe(
-
       (paramMap: ParamMap) => {
           this.loadChapter(paramMap.get('chapterId'), paramMap.get('courseId'));
           this.loadCourse(paramMap.get('courseId'));
-          this.loadCourseCreator(paramMap.get('courseId'));
+         // this.loadCourseCreator(paramMap.get('courseId'));
       }
   );
   }
 
   loadChapter(chapterId: string, courseId: string) {
     this.isLoading = true;
-    const currentUser : UserData = this.authService.getUser();
+    const currentUser: UserData = this.authService.getUser();
     this.role = currentUser.role;
 
     this.courseService.getChapterById(chapterId, courseId).subscribe(
@@ -60,7 +60,6 @@ export class ChapterComponent implements OnInit {
       (chapter: Chapter) => {
 
         this.chapter = chapter;
-
         this.isLoading = false;
       },
       (error: any) => {
@@ -73,9 +72,9 @@ export class ChapterComponent implements OnInit {
   navigateToChapterDetails(courseId: string, chapterId: string) {
 
     if (this.role === 'Teacher') {
-      this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId);
+      this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/' + chapterId);
     } else {
-      this.router.navigateByUrl('/student/courses/' + courseId + '/chapters/'+ chapterId);
+      this.router.navigateByUrl('/student/courses/' + courseId + '/chapters/' + chapterId);
     }
 
   }
@@ -91,40 +90,24 @@ export class ChapterComponent implements OnInit {
   }
 
   navigateToAddContent(courseId: string, chapterId: string) {
-    this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/'+ chapterId + '/add-content');
+    this.router.navigateByUrl('/teacher/courses/' + courseId + '/chapters/' + chapterId + '/add-content');
   }
 
   loadCourse(courseId: string) {
-
+    console.log();
     this.courseService.getCourseById(courseId).subscribe(
-
-      (course: Course) => {
-        this.course = course;
-
+      (result: any) => {
+        this.course = result.course;
+        this.creator = result.creator;
+        console.log(result.creator);
         if (this.currentUser) {
           this.isCreator = this.currentUser._id === this.course.creator;
-
         }
       },
       (error: any) => {
         console.log(error);
       }
     );
-  }
-  loadCourseCreator(courseId: string) {
-
-    this.courseService
-      .getCreatorByCourseId(courseId)
-      .subscribe(
-        (result: any) => {
-
-          this.creator = result.creator;
-          this.creatorName = this.creator.lastName + ' ' + this.creator.firstName;
-        },
-        (error: any) => {
-
-        }
-      );
   }
 
 }

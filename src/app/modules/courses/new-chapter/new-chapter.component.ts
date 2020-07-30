@@ -40,20 +40,16 @@ export class NewChapterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.data.courseId);
   }
-  onCreateChapter(){
+  onCreateChapter() {
 
     const currentUser: UserData = this.authService.getUser();
     const chapter: any = {
       chapters : [{...this.newChapterForm.value}]
     };
 
-    console.log(chapter);
-    if (this.newChapterForm.invalid){
+    if (this.newChapterForm.invalid) {
       return;
     }
-    // if (currentUser) {
-    //   course.creator = currentUser._id;
-    // }
     this.courseService.addChapter(chapter, this.data.courseId).subscribe(
       (createdChapter: Chapter) => {
           this.snackBar.open('Le chapitre a été ajouté avec succès!');

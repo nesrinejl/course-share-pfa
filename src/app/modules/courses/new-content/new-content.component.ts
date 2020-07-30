@@ -15,19 +15,19 @@ import { Content } from '../../../models/content.model';
 
 import { ContentTypeEnum } from '../../../enumerations/content-type.enum';
 
-import { mimeType } from '../../../utils/mime-type.validator';
 
 @Component({
   selector: 'app-new-content',
   templateUrl: './new-content.component.html',
   styleUrls: ['./new-content.component.scss']
 })
+
 export class NewContentComponent implements OnInit {
 
   course: Course = new Course();
   chapter: Chapter = new Chapter();
   currentUser: UserData;
-  documentsArray : Document[] = [];
+  documentsArray: Document[] = [];
 
   contentType = ContentTypeEnum.DOCUMENTATION;
   chapterId: string;
@@ -66,21 +66,19 @@ export class NewContentComponent implements OnInit {
           this.chapterId = paramMap.get('chapterId');
           this.loadChapter(this.chapterId, this.courseId);
           this.loadCourse(this.courseId);
-      })
+      });
 
   }
 
-  onCreateContent(){
+  onCreateContent() {
 
     const contentData: Content = { ...this.addContentForm.value };
-    if (this.addContentForm.invalid){
+    if (this.addContentForm.invalid) {
       return;
     }
-    console.log(this.documents.value)
     this.courseService.addContent(this.chapterId, this.courseId,  contentData.content, this.contentType, contentData.contentTitle, this.documents.value).subscribe(
       (response: any) => {
         this.snackBar.open('Le contenu a été ajouté à ce chapitre avec succès!');
-
         this.router.navigateByUrl( '/teacher/courses/' + this.courseId + '/chapters/' + this.chapterId );
 
     },
@@ -93,7 +91,7 @@ export class NewContentComponent implements OnInit {
   }
 
   loadCourse(courseId: string) {
-    const currentUser : UserData = this.authService.getUser();
+    const currentUser: UserData = this.authService.getUser();
 
     this.courseService.getCourseById(courseId).subscribe(
 
@@ -101,9 +99,7 @@ export class NewContentComponent implements OnInit {
         this.course = course;
         if (currentUser) {
           this.isCreator = currentUser._id === this.course.creator;
-
         }
-
       },
       (error: any) => {
         console.log(error);
@@ -115,10 +111,8 @@ export class NewContentComponent implements OnInit {
     this.courseService.getChapterById(chapterId, courseId).subscribe(
 
       (chapter: Chapter) => {
-
         this.chapter = chapter;
         console.log(chapter);
-
       },
       (error: any) => {
         console.log(error);
@@ -142,11 +136,6 @@ export class NewContentComponent implements OnInit {
   }
 
 
-  onDocumentSelectionChange(){
-
-  }
-
-
   onFileChange(event: any, documentIndex: number, documentType: string) {
 
     // verify if there is a file
@@ -164,19 +153,19 @@ export class NewContentComponent implements OnInit {
     const file: File = event.target.files[0];
 
     // image validation
-    if (documentType === 'IMAGE' && file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif'){
+    if (documentType === 'IMAGE' && file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
       this.snackBar.open('Le type de ce fichier est invalide! Le type de l\'image ne peut être que jpeg, jpg, png ou gif');
     }
     // file validation
-    if (documentType === 'FILE' && file.type !== 'text/plain' && file.type !== 'application/pdf' && file.type !== 'application/x-rar-compressed' && file.type !== 'application/zip' && file.type !== 'application/vnd.ms-powerpoint' && file.type !== 'application/vnd.oasis.opendocument.text' && file.type !== 'application/msword'){
+    if (documentType === 'FILE' && file.type !== 'text/plain' && file.type !== 'application/pdf' && file.type !== 'application/x-rar-compressed' && file.type !== 'application/zip' && file.type !== 'application/vnd.ms-powerpoint' && file.type !== 'application/vnd.oasis.opendocument.text' && file.type !== 'application/msword') {
       this.snackBar.open('Le type de ce fichier est invalide! Le type fichier ne peut être que pdf, rar, zip, doc, odt ou gif');
     }
     // sound validation
-    if (documentType === 'SOUND' && file.type !== 'audio/mpeg'){
+    if (documentType === 'SOUND' && file.type !== 'audio/mpeg') {
       this.snackBar.open('Le type de ce fichier est invalide! Le type de fichier doit être audio mpeg');
     }
     // video validation
-    if (documentType === 'VIDEO' && file.type !== 'video/mpeg'){
+    if (documentType === 'VIDEO' && file.type !== 'video/mpeg') {
       this.snackBar.open('Le type de ce fichier est invalide! Le type de fichier doit être en mp4');
     }
     // add the file to the form group
@@ -190,7 +179,7 @@ export class NewContentComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  onDocumentTypeSelectionChange(index: number){
+  onDocumentTypeSelectionChange(index: number) {
 
   }
 

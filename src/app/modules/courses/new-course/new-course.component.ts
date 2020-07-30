@@ -11,6 +11,7 @@ import { CourseService } from '../../../services/course.service';
 import { AuthService } from '../../../services/auth.service';
 import { UserData } from '../../../models/user.model';
 import { Course } from 'src/app/models/course.model';
+import { ClassGetter } from '@angular/compiler/src/output/output_ast';
 @Component({
   templateUrl: './new-course.component.html',
   styleUrls: [ './new-course.component.css' ]
@@ -36,21 +37,21 @@ export class NewCourseComponent {
 
   });
 
-  onCreateCourse(){
+  onCreateCourse() {
     const currentUser: UserData = this.authService.getUser();
     const course: Course = { ...this.newCourseForm.value };
 
-    if (this.newCourseForm.invalid){
+    if (this.newCourseForm.invalid) {
       return;
     }
     if (currentUser) {
       course.creator = currentUser._id;
     }
     this.courseService.createCourse(course).subscribe(
-      (response: any) => {
+      (createdCourse: Course) => {
           this.snackBar.open('Le cours a été créé avec succès!');
-
-          this.router.navigate([ '/teacher/courses' ]);
+          console.log(createdCourse);
+          this.router.navigateByUrl('/teacher/courses');
           this.dialogRef.close(true);
       },
       (error: any) => {
